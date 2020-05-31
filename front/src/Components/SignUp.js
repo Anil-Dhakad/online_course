@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { signup } from "./apiUser";
+import { signup } from "./apiCore";
 
 const SignUp = (props) => {
   const [values, setValues] = useState({

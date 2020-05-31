@@ -1,10 +1,30 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import ShowCard from "../Course/ShowCard";
-import { isAuthenticated } from "../User/apiUser";
+import { isAuthenticated } from "./apiUser";
+import { showCartItem } from "../Cart/apiCart";
 
 const UserHome = (props) => {
   const courses = props.courses;
+
+  const [cart, setCart] = useState();
+
   const { user } = isAuthenticated();
+
+  const cartItem = () => {
+    const id = user._id;
+    showCartItem({ id }).then((data) => {
+      if (data.error) {
+        console.log("Cart Item: ", data.error);
+      } else {
+        setCart(data);
+      }
+    });
+  };
+
+  useEffect(() => {
+    cartItem();
+  }, []);
+
   return (
     <Fragment>
       {courses &&
@@ -14,8 +34,8 @@ const UserHome = (props) => {
               <ShowCard
                 key={i}
                 clickHandler={props.clickHandler}
-                AddToCart={true}
                 course={course}
+                cart={cart}
               />
             );
         })}

@@ -1,19 +1,91 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import moment from "moment";
 import { URL } from "../config";
+import { isAuthenticated } from "../Components/apiCore";
+import { addCartItem } from "../Cart/apiCart";
 
 const ShowCard = (props) => {
   const course = props.course;
-  //   const categories = props.categories;
-  //   const skills = props.skills;
+  const carts = props.cart;
+
+  const [title, setTitle] = useState();
+
+  const { user } = isAuthenticated();
+
+  console.log("Show-Card: ", carts);
+
+  let d = 0;
+
+  if (user) {
+    carts.forEach((element) => {
+      if (element.course === course._id) {
+        d = 1;
+      }
+    });
+  }
+
+  const itemSubmit = (id) => {
+    const item = {
+      user: user._id,
+      course: id,
+    };
+    addCartItem(item).then((data) => {
+      if (data.error) {
+        console.log("Add To Cart: ", data.error);
+      } else {
+        setTitle("gotocart");
+      }
+    });
+  };
 
   const ShowAddToCartButton = () => {
-    if (props.AddToCart) {
+    if (user && d === 1) {
+      return (
+        <Fragment>
+          <strong
+            style={{
+              color: "#228a22",
+              paddingRight: "1em",
+              textDecoration: "underline",
+            }}
+          >
+            In Cart
+          </strong>
+          <button
+            className="btn btn-success"
+            data-dismiss="modal"
+            onClick={() => props.clickHandler("cart")}
+          >
+            Go to cart
+          </button>
+        </Fragment>
+      );
+    } else if (user && title === "gotocart") {
+      return (
+        <Fragment>
+          <strong
+            style={{
+              color: "#228a22",
+              paddingRight: "1em",
+              textDecoration: "underline",
+            }}
+          >
+            Added to Cart
+          </strong>
+          <button
+            className="btn btn-success"
+            data-dismiss="modal"
+            onClick={() => props.clickHandler("cart")}
+          >
+            Go to cart
+          </button>
+        </Fragment>
+      );
+    } else if (user) {
       return (
         <button
           className="btn btn-secondary"
-          data-dismiss="modal"
-          onClick={() => props.clickHandler("cart")}
+          onClick={() => itemSubmit(course._id)}
         >
           Add to cart
         </button>

@@ -2,11 +2,27 @@ import React, { Fragment } from "react";
 import moment from "moment";
 import { URL } from "../config";
 import EditCourse from "../Course/EditCourse";
+import EditCoursePhoto from "./EditCoursePhoto";
 
-const Card = (props) => {
+const EditCard = (props) => {
   const course = props.course;
   const categories = props.categories;
   const skills = props.skills;
+
+  const formatDate = (dateString) => {
+    const options = { day: "numeric", month: "numeric", year: "numeric" };
+    const input = new Date(dateString).toLocaleDateString(undefined, options);
+    var parts = input.split("/");
+    return (
+      (parts[0] < 10 ? "0" : "") +
+      parseInt(parts[0]) +
+      "-" +
+      (parts[1] < 10 ? "0" : "") +
+      parseInt(parts[1]) +
+      "-" +
+      parseInt(parts[2])
+    );
+  };
 
   // console.log(course);
 
@@ -30,7 +46,11 @@ const Card = (props) => {
             className="card-img-top"
             src={`${URL}/images/course_profile/${course.photo}`}
             alt="Card image"
-            style={{ width: "100%", height: "30vh" }}
+            style={{
+              width: "100%",
+              height: "30vh",
+              borderBottom: "1px solid #c8e3ea",
+            }}
           />
           <div className="card-body">
             <h6
@@ -49,6 +69,8 @@ const Card = (props) => {
           </div>
         </a>
       </div>
+
+      {/* /////////////////// Course detail modal ////////////////////// */}
 
       <div className="modal fade" id={"m" + course._id}>
         <div className="modal-dialog modal-md">
@@ -111,10 +133,11 @@ const Card = (props) => {
         </div>
       </div>
 
+      {/* /////////////////// Edit course modal ////////////////////// */}
+
       <div className="modal fade" id={"e" + course._id}>
         <div className="modal-dialog modal-md">
           <div className="modal-content">
-            {/* <div className="modal-header" style={{ padding: "0.5em 1em" }}> */}
             <div
               className="modal-header"
               style={{ padding: "0.5rem 1rem 0rem", display: "block" }}
@@ -147,6 +170,27 @@ const Card = (props) => {
         </div>
       </div>
 
+      {/* /////////////////// Edit course photo modal ////////////////////// */}
+
+      <div className="modal fade" id={"photo" + course._id}>
+        <div className="modal-dialog modal-md">
+          <div className="modal-content">
+            <div className="modal-header" style={{ padding: "0.5em 1em" }}>
+              <h5 className="modal-title">{course.name}</h5>
+              <button type="button" className="close" data-dismiss="modal">
+                &times;
+              </button>
+            </div>
+
+            <div className="modal-body text-body p-1">
+              <EditCoursePhoto course={course} />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* /////////////////// Delete course modal ////////////////////// */}
+
       <div className="modal fade" id={"del" + course._id}>
         <div className="modal-dialog modal-md">
           <div className="modal-content">
@@ -162,7 +206,7 @@ const Card = (props) => {
                 <b className="text-warning">{course.name}</b>
                 &nbsp; created by&nbsp;
                 <b className="text-success">{course.user.name}</b> on&nbsp;
-                <b className="text-success">{course.createdAt}</b>.
+                <b className="text-success">{formatDate(course.createdAt)}</b>.
               </h6>
             </div>
             <div
@@ -187,4 +231,4 @@ const Card = (props) => {
   );
 };
 
-export default Card;
+export default EditCard;

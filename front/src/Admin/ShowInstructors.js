@@ -8,7 +8,7 @@ import { deleteUser, showAllUser } from "./apiAdmin";
 // import "../asset/js/shCore";
 // import "../asset/js/dataTable";
 
-const ShowInstructors = () => {
+const ShowInstructors = ({ courses }) => {
   const [users, setUsers] = useState();
 
   const [error, setError] = useState();
@@ -54,8 +54,8 @@ const ShowInstructors = () => {
           <thead>
             <tr className="row table-head">
               <th className="col">SNo.</th>
-              <th className="col">NAME</th>
-              <th className="col">EMAIL-ID</th>
+              <th className="col">Profile</th>
+              <th className="col">Details</th>
               <th className="col">DELETE</th>
             </tr>
           </thead>
@@ -75,6 +75,8 @@ const ShowInstructors = () => {
                         style={{ display: "block" }}
                       >
                         {user.name}
+                        <br />
+                        {user.email}
                       </td>
 
                       <td
@@ -82,7 +84,12 @@ const ShowInstructors = () => {
                         id={`del1_${i}`}
                         style={{ display: "block" }}
                       >
-                        {user.email}
+                        {courses &&
+                          courses.map((course, k) => {
+                            if (course.user._id === user._id) {
+                              return <h6 key={k}>{course.name}</h6>;
+                            }
+                          })}
                       </td>
 
                       <td className="col">

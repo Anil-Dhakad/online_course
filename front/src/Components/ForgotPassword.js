@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { forgotpwd } from "./apiUser";
+import { forgotpwd } from "./apiCore";
 
 const ForgotPassword = (props) => {
   const [values, setValues] = useState({

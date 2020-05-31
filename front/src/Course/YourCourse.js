@@ -1,13 +1,15 @@
 import React, { Fragment, useState, useEffect } from "react";
 import NewCourse from "./NewCourse";
-import Card from "./Card";
-import { showAllCategory, showAllSkill } from "../Admin/apiAdmin";
+import EditCard from "./EditCard";
+import { showAllCategory, showAllSkill, showAllUser } from "../Admin/apiAdmin";
 import { deleteCourse } from "./apiCourse";
-import { isAuthenticated } from "../User/apiUser";
+import { isAuthenticated } from "../Components/apiCore";
+import SearchBar from "./SearchBar";
 
 const YourCourse = ({ courses }) => {
   const [categories, setCategories] = useState();
   const [skills, setSkills] = useState();
+  const [users, setUsers] = useState();
 
   const showCategories = () => {
     showAllCategory().then((data) => {
@@ -29,20 +31,31 @@ const YourCourse = ({ courses }) => {
     });
   };
 
+  const showUsers = () => {
+    showAllUser().then((data) => {
+      if (data.error) {
+        console.log("showUsers: ", data.error);
+      } else {
+        setUsers(data);
+      }
+    });
+  };
+
   useEffect(() => {
     showCategories();
     showSkills();
+    showUsers();
   }, []);
 
   const { user } = isAuthenticated();
 
   const deleteHandler = (_id) => {
-    // console.log("id: ", child);
+    // console.log("id: ", _id);
     deleteCourse({ _id }).then((data) => {
       if (data.error) {
         setError(data.error);
       } else {
-        <b onloadeddata={() => props.clickHandler("course")} />;
+        window.location.reload();
       }
     });
   };
@@ -52,15 +65,15 @@ const YourCourse = ({ courses }) => {
       <center>
         <h2>Courses</h2>
       </center>
+      <SearchBar users={users} />
       <NewCourse categories={categories} skills={skills} />
-      <br />
       <br />
 
       {courses &&
         courses.map((course, i) => {
           if (user.role === "admin") {
             return (
-              <Card
+              <EditCard
                 key={i}
                 categories={categories}
                 skills={skills}
@@ -70,7 +83,7 @@ const YourCourse = ({ courses }) => {
             );
           } else if (course.user._id === user._id)
             return (
-              <Card
+              <EditCard
                 key={i}
                 categories={categories}
                 skills={skills}

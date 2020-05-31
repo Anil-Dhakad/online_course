@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { signin, isAuthenticated, authenticate } from "./apiUser";
+import { signin, isAuthenticated, authenticate } from "./apiCore";
 import { Redirect } from "react-router-dom";
 
 const SignIn = (props) => {

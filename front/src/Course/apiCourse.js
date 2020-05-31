@@ -22,9 +22,27 @@ export const showAllCourse = () => {
     });
 };
 
-export const editCourse = (formData) => {
+export const editCourse = (course) => {
+  // console.log("course_Data: ", course);
+  return fetch(`${API}/course/edit`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(course),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+export const editPhoto = (formData) => {
   return axios
-    .post(`${API}/course/edit`, formData)
+    .post(`${API}/course/photo`, formData)
     .then((response) => {
       return response;
     })

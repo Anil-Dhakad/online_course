@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from "react";
 import { createCourse } from "./apiCourse";
-import { isAuthenticated } from "../User/apiUser";
+import { isAuthenticated } from "../Components/apiCore";
 
 const NewCourse = ({ categories, skills }) => {
   const [values, setValues] = useState({
@@ -9,8 +9,6 @@ const NewCourse = ({ categories, skills }) => {
     price: "",
     category: "",
     photo: "",
-    loading: false,
-    redirectToProfile: false,
   });
   const [items, setSkill] = useState([]);
 
@@ -33,15 +31,7 @@ const NewCourse = ({ categories, skills }) => {
     }
   };
 
-  const {
-    name,
-    description,
-    price,
-    category,
-    photo,
-    loading,
-    redirectToProfile,
-  } = values;
+  const { name, description, price, category, photo } = values;
 
   const { user } = isAuthenticated();
 
@@ -106,6 +96,7 @@ const NewCourse = ({ categories, skills }) => {
               </strong>
             </div>
           );
+          window.location.reload();
         } else if (data.error) {
           setError(
             <div className="alert alert-danger p-2">
@@ -296,14 +287,6 @@ const NewCourse = ({ categories, skills }) => {
   return (
     <Fragment>
       <div style={{ float: "right" }}>
-        <button
-          type="button"
-          className="btn btn-secondary"
-          data-toggle="modal"
-          data-target="#myModal"
-        >
-          Add new course
-        </button>
         <div className="modal fade" id="myModal">
           <div className="modal-dialog modal-md">
             <div className="modal-content">

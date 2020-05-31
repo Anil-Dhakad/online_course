@@ -1,9 +1,9 @@
 import React from "react";
-import { signout } from "../User/apiUser";
+import { signout } from "../Components/apiCore";
 import { withRouter } from "react-router-dom";
 import "../asset/css/style.css";
 
-const Navbar_Instructor = (props, history) => {
+const NavbarHome = (props, history) => {
   return (
     <nav className="navbar">
       {/* <div className="menu_container" id="sidebarCollapse">
@@ -21,7 +21,7 @@ const Navbar_Instructor = (props, history) => {
           className="btn btn-primary"
           onClick={() => {
             signout(() => {
-              props.history.push("/index");
+              props.history.push("/");
             });
           }}
         >
@@ -32,4 +32,4 @@ const Navbar_Instructor = (props, history) => {
   );
 };
 
-export default withRouter(Navbar_Instructor);
+export default withRouter(NavbarHome);

@@ -1,38 +1,48 @@
-import React, { Fragment } from "react";
+import React, { useEffect, useState } from "react";
 import { Redirect } from "react-router-dom";
-import { isAuthenticated } from "../User/apiUser";
-import AdminHome from "../Admin/AdminHome";
-import InstructorHome from "../Instructor/InstructorHome";
-import ClientHome from "../Client/ClientHome";
-import NavbarHome from "./NavbarHome";
+import Navbar from "./Navbar";
+import SignUp from "../Components/SignUp";
+import SignIn from "../Components/SignIn";
+import ForgotPassword from "../Components/ForgotPassword";
+import { isAuthenticated } from "../Components/apiCore";
+import MainPage from "./MainPage";
 import "../asset/css/style.css";
-import "../asset/css/sidebar.css";
-import "../asset/js/javascript";
 
 const Home = () => {
-  const { user } = isAuthenticated();
+  const [child, setChild] = useState("");
+
+  const navbarHandler = (navChild) => {
+    setChild(navChild);
+  };
+
+  useEffect(() => {}, [child]);
 
   const checkAuthentication = () => {
-    if (!isAuthenticated()) {
-      return <Redirect to="/index" />;
+    if (isAuthenticated()) {
+      return <Redirect to="/main" />;
     }
   };
 
-  const showHome = () => {
-    if (user && user.role === "admin") {
-      return <AdminHome />;
-    } else if (user && user.role === "instructor") {
-      return <InstructorHome />;
-    } else if (user && user.role === "client") {
-      return <ClientHome />;
+  const getComponents = () => {
+    if (child === "signin") {
+      return <SignIn clickHandler={navbarHandler} />;
+    } else if (child === "signup") {
+      return <SignUp clickHandler={navbarHandler} />;
+    } else if (child === "forgotpwd") {
+      return <ForgotPassword clickHandler={navbarHandler} />;
+    } else if (child === "home") {
+      return <MainPage clickHandler={navbarHandler} />;
+    } else {
+      return <MainPage clickHandler={navbarHandler} />;
     }
   };
+
   return (
-    <Fragment>
+    <div>
       {checkAuthentication()}
-      <NavbarHome />
-      {showHome()}
-    </Fragment>
+      <Navbar clickHandler={navbarHandler} />
+      {getComponents()}
+    </div>
   );
 };
 

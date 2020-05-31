@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { isAuthenticated } from "../User/apiUser";
+import { isAuthenticated } from "../Components/apiCore";
 
 const SidebarInstructor = (props) => {
   const { user } = isAuthenticated();
@@ -37,7 +37,9 @@ const SidebarInstructor = (props) => {
         <li className="li">
           <a onClick={() => props.clickHandler("cart")}>
             <span className="fa fa-shopping-cart mr-3 notif">
-              <sup className="badge badge-pill badge-primary"></sup>
+              <sup className="badge badge-pill badge-primary">
+                {props.count}
+              </sup>
             </span>
             Your Cart
           </a>

@@ -24,6 +24,8 @@ import jQuery from "jquery";
     document.getElementById("mySearch").style.display = "block";
   });
 
+  ////////////////// Search by skills ////////////////////
+
   $(document).on("keyup", "#search", function () {
     var input, filter, ul, li, a, i, txtValue;
     input = document.getElementById("search").value;
@@ -40,6 +42,56 @@ import jQuery from "jquery";
       }
     }
   });
+
+  ////////////////// Search by course-name in home page ///////////////
+
+  $(document).on("keyup", "#sear", function () {
+    var input, filter, card, h6, i, txtValue;
+    input = document.getElementById("sear").value;
+
+    filter = input.toUpperCase();
+    card = document.getElementsByClassName("card");
+    for (i = 0; i < card.length; i++) {
+      h6 = card[i].getElementsByTagName("h6")[0];
+      txtValue = h6.textContent || h6.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        card[i].style.display = "inline-block";
+      } else {
+        card[i].style.display = "none";
+      }
+    }
+  });
+
+  ////////////////// Search by course-name for select user in home page ///////////////
+
+  $(document).on("click", "#sel", function () {
+    var input, filter, card, p, i, txtValue;
+    input = document.getElementById("sel").value;
+
+    filter = input.toUpperCase();
+    card = document.getElementsByClassName("card");
+
+    if (input === "All") {
+      document.getElementById("sear").disabled = false;
+      for (i = 0; i < card.length; i++) {
+        card[i].style.display = "inline-block";
+      }
+    } else {
+      document.getElementById("sear").disabled = true;
+      for (i = 0; i < card.length; i++) {
+        p = card[i].getElementsByTagName("p")[0];
+        txtValue = p.textContent || p.innerText;
+
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          card[i].style.display = "inline-block";
+        } else {
+          card[i].style.display = "none";
+        }
+      }
+    }
+  });
+
+  //////////////////////// Toggle Skills chips NewCourse /////////////////////
 
   for (let i = 0; i < 50; i++) {
     $(document).on("click", "#chip" + i, function () {

@@ -249,6 +249,9 @@ body {
   color: #ffffff;
   font-weight: 100;
 }
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
 
 /* //////////////////// Chips /////////////////////////////// */
 
@@ -278,7 +281,6 @@ input[id="search"] {
   border-radius: 4px;
   font-size: 16px;
   background-color: white;
-  /* background-image: url("searchicon.png"); */
   background-position: 10px 10px;
   background-repeat: no-repeat;
   padding: 12px 20px 12px 40px;
@@ -288,6 +290,14 @@ input[id="search"] {
 
 input[id="search"]:focus {
   width: 60%;
+}
+
+input[type="search"] {
+  font-size: 1.1rem !important;
+  background-image: url("../images/searchicon.png");
+  background-position: 10px 12px;
+  background-repeat: no-repeat;
+  padding: 7px 5px 7px 40px !important;
 }
 
 .search_box {
@@ -309,4 +319,9 @@ input[id="search"]:focus {
 
 .card:hover {
   box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.4);
+}
+
+.remove:hover {
+  cursor: pointer;
+  color: #565050;
 }

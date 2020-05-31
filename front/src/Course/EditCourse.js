@@ -1,21 +1,25 @@
 import React, { useState, Fragment } from "react";
 import { editCourse } from "./apiCourse";
-import { isAuthenticated } from "../User/apiUser";
+import $ from "jquery";
 
 const EditCourse = ({ categories, skills, course }) => {
-  console.log("course: ", course);
-  console.log("userId: ", course.user._id);
+  console.log("course: ", course.skills[0]);
+  console.log("course-JSON : ", JSON.stringify(course.skills[0]));
+
+  // var list = [];
+  course.skills.forEach((e) => {
+    console.log("e: ", e[2]);
+  });
+
   const [values, setValues] = useState({
     name: course.name,
     description: course.description,
     price: course.price,
-    category: course.category.name,
+    category: course.category._id,
+    categoryName: course.category.name,
     photo: course.photo,
-    loading: false,
-    redirectToProfile: false,
-    formData: "",
   });
-  const [items, setSkill] = useState([]);
+  const [items, setSkill] = useState(course.skills[0]);
 
   const [error, setError] = useState();
 
@@ -27,27 +31,20 @@ const EditCourse = ({ categories, skills, course }) => {
   };
 
   const skillHandler = (event) => {
+    const val = event.target.value;
+
+    $("#chips" + val + course._id).toggleClass("chip-change");
+
     setError("");
     event.preventDefault();
-    if (items.find((element) => element === event.target.value)) {
-      items.splice(items.indexOf(event.target.value), 1);
+    if (items.find((element) => element === val)) {
+      items.splice(items.indexOf(val), 1);
     } else {
-      setSkill([...items, event.target.value]);
+      setSkill([...items, val]);
     }
   };
 
-  const {
-    name,
-    description,
-    price,
-    category,
-    photo,
-    loading,
-    redirectToProfile,
-    formData,
-  } = values;
-
-  const { user } = isAuthenticated();
+  const { name, description, price, category, categoryName, photo } = values;
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -71,70 +68,63 @@ const EditCourse = ({ categories, skills, course }) => {
       );
     } else {
       setError("");
-      const formData = new FormData();
-      formData.append("id", course._id);
-      formData.append("name", name);
-      formData.append("description", description);
-      formData.append("category", category);
-      formData.append("skills", items);
-      formData.append("price", price);
-      formData.append("photo", photo);
 
-      console.log("formData: ", formData);
+      const courseData = {
+        id: course._id,
+        name: name,
+        description: description,
+        price: price,
+        category: category,
+        skills: items,
+      };
 
-      editCourse(formData).then((data) => {
-        data = data.data;
-        if (data.error === "all fields") {
-          setError(
-            <div className="alert alert-danger p-1">
-              <strong style={{ color: "red" }}>
-                <i className="fa fa-info-circle" />
-                &nbsp; All fields are required...
-              </strong>
-            </div>
-          );
-        } else if (data.msg === "updated") {
-          setError(
-            <div className="alert alert-success p-2">
-              <strong>
-                Course <b style={{ color: "#30bd30" }}>{name}</b> is
-                successfully updated...
-              </strong>
-            </div>
-          );
-        } else if (data.error) {
-          setError(
-            <div className="alert alert-danger p-2">
-              <strong>{data.error}</strong>
-            </div>
-          );
-        } else {
-          setError(
-            <div className="alert alert-danger p-2">
-              <strong>Something went wrong...</strong>
-            </div>
-          );
-        }
-      });
+      // editCourse(courseData).then((data) => {
+      //   if (data.error === "all fields") {
+      //     setError(
+      //       <div className="alert alert-danger p-1">
+      //         <strong style={{ color: "red" }}>
+      //           <i className="fa fa-info-circle" />
+      //           &nbsp; All fields are required...
+      //         </strong>
+      //       </div>
+      //     );
+      //   } else if (data.msg === "updated") {
+      //     window.location.reload();
+      //   } else if (data.error) {
+      //     setError(
+      //       <div className="alert alert-danger p-2">
+      //         <i className="fa fa-info-circle" />
+      //         &nbsp;
+      //         <strong>{data.error}</strong>
+      //       </div>
+      //     );
+      //   } else {
+      //     setError(
+      //       <div className="alert alert-danger p-2">
+      //         <strong>Something went wrong...</strong>
+      //       </div>
+      //     );
+      //   }
+      // });
     }
   };
 
   const modalBody = () => (
     <form onSubmit={submitHandler}>
       <div className="form-group">
-        <label style={{ margin: "0px", width: "19%", fontSize: "1.3em" }}>
-          Photo:
+        <label style={{ margin: "0px", width: "40%", fontSize: "1.3em" }}>
+          Course Image:
         </label>
-        <label className="btn btn-secondary" style={{ width: "80%" }}>
-          <input
-            type="file"
-            name="photo"
-            accept="image/*"
-            required
-            style={{ float: "left" }}
-            onChange={handleChange}
-          />
-        </label>
+
+        <button
+          className="btn btn-primary"
+          style={{ width: "30%" }}
+          data-dismiss="modal"
+          data-toggle="modal"
+          data-target={"#photo" + course._id}
+        >
+          Change Image
+        </button>
       </div>
 
       <div className="form-group">
@@ -210,7 +200,7 @@ const EditCourse = ({ categories, skills, course }) => {
           style={{ float: "right", width: "73%" }}
           onChange={handleChange}
         >
-          <option value={course.category._id}>{category}</option>
+          <option value={course.category._id}>{categoryName}</option>
           {categories &&
             categories.map((c, i) => (
               <option key={i} value={c._id}>
@@ -256,9 +246,10 @@ const EditCourse = ({ categories, skills, course }) => {
           skills.map((s, i) => (
             <div
               className="chip"
-              id={"chip" + i}
+              id={"chips" + s._id + course._id}
               key={i}
               onClick={skillHandler}
+              // onKeyPress={() => changeClass(i)}
             >
               <button
                 style={{ background: "transparent", border: "transparent" }}

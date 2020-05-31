@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route } from "react-router-dom";
-import Index from "./Components/Index";
+import UserHome from "./User/UserHome";
 import Home from "./Components/Home";
 
 const Routes = () => {
@@ -8,7 +8,7 @@ const Routes = () => {
     <BrowserRouter>
       <Route path="/" exact component={Home} />
       <Route path="/home" exact component={Home} />
-      <Route path="/index" exact component={Index} />
+      <Route path="/main" exact component={UserHome} />
     </BrowserRouter>
   );
 };

@@ -1,5 +1,6 @@
 import React from "react";
-import { isAuthenticated } from "../User/apiUser";
+import { isAuthenticated } from "../Components/apiCore";
+import Photo from "../User/Photo";
 
 const Sidebar_Admin = (props) => {
   const { user } = isAuthenticated();
@@ -21,7 +22,8 @@ const Sidebar_Admin = (props) => {
               }}
             ></i>
           </div> */}
-          <div className="img logo"></div>
+          {/* <div className="img logo"></div> */}
+          <Photo />
           <h3>{user.name}</h3>
         </div>
       </div>

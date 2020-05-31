@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import $ from "jquery";
-import { isAuthenticated, profile, updateAuthenticate } from "./apiUser";
+import { profile } from "./apiUser";
+import { isAuthenticated, updateAuthenticate } from "../Components/apiCore";
 
 const Profile = (props) => {
   const { user } = isAuthenticated();
