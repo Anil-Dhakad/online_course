@@ -26,6 +26,10 @@ const userSchema = new Schema(
       type: String,
       default: "user",
     },
+    photo: {
+      type: String,
+      default: "sample07bda2c14817cba31734ca2991",
+    },
   },
   { timestamps: true }
 );

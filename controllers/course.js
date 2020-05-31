@@ -53,7 +53,51 @@ exports.create = (req, res) => {
   });
 };
 
+// var storage = multer.diskStorage({
+//   destination: (req, file, callback) => {
+//     console.log("file-122:", file);
+//     callback(null, "front/public/images/course_profile");
+//   },
+//   filename: (req, file, callback) => {
+//     console.log("file-2222:", file);
+//     var filetype = file.mimetype;
+//     var fileformate = filetype.split("/")[1];
+//     callback(null, Date.now() + "." + fileformate);
+//   },
+// });
+// var upload = multer({ storage: storage });
+
 exports.update = (req, res) => {
+  console.log("data: ", req.body);
+  const { id, name, description, price, category, skills } = req.body;
+
+  if (!name || !description || !price || !category || !skills) {
+    return res.json({ error: "all fields" });
+  } else {
+    Course.findOneAndUpdate(
+      { _id: id },
+      {
+        name: name,
+        description: description,
+        price: price,
+        category: category,
+      },
+      { new: true, useFindAndModify: false },
+      (err, result) => {
+        console.log("result: ", result);
+        if (err) {
+          return res.json({ error: errorHandler(err) });
+        } else if (result) {
+          return res.json({ msg: "updated" });
+        } else {
+          return res.json({ error: "Course not found" });
+        }
+      }
+    );
+  }
+};
+
+exports.updatePhoto = (req, res) => {
   var upload = multer({ dest: "front/public/images/course_profile" }).single(
     "photo"
   );
@@ -61,8 +105,6 @@ exports.update = (req, res) => {
   upload(req, res, (err) => {
     console.log("data: ", req.body);
     console.log("file: ", req.file);
-
-    const { id, name, description, price, category, skills } = req.body;
 
     if (req.fileValidationError) {
       return res.send(req.fileValidationError);
@@ -72,26 +114,18 @@ exports.update = (req, res) => {
       return res.json({ error: err });
     } else if (err) {
       return res.json({ error: err });
-    } else if (!name || !description || !price || !category || !skills) {
-      return res.json({ error: "all fields" });
     }
 
     Course.findOneAndUpdate(
-      { _id: id },
-      {
-        name: name,
-        description: description,
-        price: price,
-        category: category,
-        photo: req.file.filename,
-      },
+      { _id: req.body.id },
+      { photo: req.file.filename },
       { new: true, useFindAndModify: false },
       (err, result) => {
         console.log("result: ", result);
         if (err) {
           return res.json({ error: errorHandler(err) });
         } else if (result) {
-          return res.json({ msg: "updated" });
+          return res.json({ result: result });
         } else {
           return res.json({ error: "Course not found" });
         }
@@ -117,6 +151,21 @@ exports.list = (req, res) => {
     .populate("user")
     .populate("Skills")
     // .sort({ name: 1 })
+    .exec((err, result) => {
+      if (err) {
+        return res.status(400).json({ error: errorHandler(err) });
+      }
+      return res.json(result);
+    });
+};
+
+exports.search = (req, res) => {
+  // console.log("body: ", req.body.category);
+  const d = req.body;
+  Course.find({ category: d.category })
+    .populate("category")
+    .populate("user")
+    .populate("Skills")
     .exec((err, result) => {
       if (err) {
         return res.status(400).json({ error: errorHandler(err) });

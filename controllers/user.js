@@ -36,8 +36,8 @@ exports.signin = (req, res) => {
     const token = jwt.sign({ _id: result._id }, process.env.JWT_SECRET);
     res.cookie("t", token, { expire: new Date() + 9999 });
 
-    const { _id, name, email, role } = result;
-    return res.json({ token, user: { _id, email, name, role } });
+    const { _id, name, email, role, photo } = result;
+    return res.json({ token, user: { _id, email, name, role, photo } });
   });
 };
 
@@ -184,7 +184,6 @@ exports.list = (req, res) => {
     .select("-hashed_password")
     .select("-salt")
     .select("-updatedAt")
-    .select("-_id")
     .select("-__v")
     .sort({ name: 1 })
     .exec((err, result) => {
