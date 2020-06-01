@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { signup } from "./apiCore";
 
 const SignUp = (props) => {
@@ -151,8 +151,14 @@ const SignUp = (props) => {
       </div>
     </div>
   );
-
-  return <div>{signupForm()}</div>;
+  return (
+    <Fragment>
+      <br />
+      <br />
+      <br />
+      {signupForm()}
+    </Fragment>
+  );
 };
 
 export default SignUp;

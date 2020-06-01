@@ -2,7 +2,7 @@ import React from "react";
 
 const Navbar = (props) => {
   return (
-    <nav className="navbar">
+    <nav className="navbar" style={{ position: "fixed", zIndex: "1000" }}>
       <a className="navbar-brand" onClick={() => props.clickHandler("home")}>
         Online-Study
       </a>

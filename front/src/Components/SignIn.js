@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { signin, isAuthenticated, authenticate } from "./apiCore";
 import { Redirect } from "react-router-dom";
 
@@ -123,9 +123,12 @@ const SignIn = (props) => {
   );
 
   return (
-    <div>
+    <Fragment>
+      <br />
+      <br />
+      <br />
       {signinForm()} {redirectUser()}
-    </div>
+    </Fragment>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { forgotpwd } from "./apiCore";
 
 const ForgotPassword = (props) => {
@@ -79,7 +79,14 @@ const ForgotPassword = (props) => {
     </div>
   );
 
-  return <div>{ForgotPwdForm()}</div>;
+  return (
+    <Fragment>
+      <br />
+      <br />
+      <br />
+      {ForgotPwdForm()}
+    </Fragment>
+  );
 };
 
 export default ForgotPassword;
