@@ -9,6 +9,7 @@ const {
   profile,
   changePwd,
   list,
+  updatePhoto,
 } = require("../controllers/user");
 
 router.post("/signup", signup);
@@ -18,5 +19,6 @@ router.post("/forgotpwd", forgotpwd);
 router.post("/profile", profile);
 router.post("/changepwd", changePwd);
 router.post("/user/users", list);
+router.post("/user/photo", updatePhoto);
 
 module.exports = router;
