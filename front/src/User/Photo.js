@@ -1,51 +1,62 @@
-import React, { useState } from "react";
-import { isAuthenticated } from "../Components/apiCore";
+import React, { useState, Fragment } from "react";
+import { isAuthenticated, updateAuthenticate } from "../Components/apiCore";
 import { URL } from "../config";
 import { userPhoto } from "./apiUser";
 
 const Photo = () => {
   const { user } = isAuthenticated();
 
-  const [photo, setPhoto] = useState(user.photo);
+  const [values, setValues] = useState({
+    photo: user.photo,
+    update: false,
+  });
+
+  const { photo, update } = values;
 
   const changeHandler = (event) => {
-    console.log("event: ", event);
     const value = event.target.files[0];
-    setPhoto({ ...photo, value });
+    if (value.type.includes("image/")) {
+      setValues({ photo: value, update: true });
+    }
+  };
 
-    if (photo !== "") {
-      console.log("photo: ", photo);
-
+  const submitPhoto = () => {
+    if (update) {
       const formData = new FormData();
       formData.append("id", user._id);
       formData.append("photo", photo);
 
       userPhoto(formData).then((data) => {
         data = data.data;
-        console.log("data: ", data);
         if (data.result) {
-          setPhoto(data.result);
+          updateAuthenticate({ image: data.result }, () => {
+            setValues({ ...values, photo: data.result, update: false });
+          });
         }
       });
     }
   };
 
   return (
-    <label htmlFor="image">
-      <input
-        type="file"
-        name="photo"
-        accept="image/*"
-        style={{ display: "none" }}
-        onChange={changeHandler}
-      />
-      <img
-        className="img"
-        src={`${URL}/images/user/${photo}`}
-        alt="Card image"
-        style={{ cursor: "pointer", marginBottom: "0" }}
-      />
-    </label>
+    <Fragment>
+      {submitPhoto()}
+      <label htmlFor="image">
+        <input
+          type="file"
+          name="photo"
+          id="image"
+          accept="image/*"
+          style={{ display: "none" }}
+          onChange={changeHandler}
+        />
+        <img
+          className="img"
+          src={`${URL}/images/user/${photo}`}
+          alt="Card image"
+          style={{ cursor: "pointer", marginBottom: "0" }}
+        />
+      </label>
+    </Fragment>
   );
 };
 

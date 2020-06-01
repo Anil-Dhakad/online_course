@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { isAuthenticated } from "../Components/apiCore";
+import Photo from "./Photo";
 
 const SidebarInstructor = (props) => {
   const { user } = isAuthenticated();
@@ -18,7 +19,8 @@ const SidebarInstructor = (props) => {
     <nav id="sidebar">
       <div className="img bg-wrap text-center py-4 bg">
         <div className="user-logo">
-          <div className="img logo"></div>
+          {/* <div className="img logo"></div> */}
+          <Photo />
           <h3>{user.name}</h3>
         </div>
       </div>

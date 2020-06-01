@@ -1,10 +1,11 @@
 import { API } from "../config";
+import axios from "axios";
 
 //////////////////////// User ///////////////////////////
 
 export const userPhoto = (formData) => {
   return axios
-    .post(`${API}/course/photo`, formData)
+    .post(`${API}/user/photo`, formData)
     .then((response) => {
       return response;
     })
