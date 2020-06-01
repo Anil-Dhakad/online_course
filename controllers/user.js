@@ -2,6 +2,7 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken"); // to generate  signed token
 const expressJwt = require("express-jwt"); // for authorization check
 const { errorHandler } = require("../helphers/dbErrorHandler");
+var multer = require("multer");
 
 exports.signup = (req, res) => {
   const user = new User(req.body);
@@ -193,4 +194,39 @@ exports.list = (req, res) => {
       }
       return res.json(result);
     });
+};
+
+exports.updatePhoto = (req, res) => {
+  var upload = multer({ dest: "front/public/images/user" }).single("photo");
+
+  upload(req, res, (err) => {
+    console.log("data: ", req.body);
+    console.log("file: ", req.file);
+
+    if (req.fileValidationError) {
+      return res.send(req.fileValidationError);
+    } else if (!req.file) {
+      return res.json({ error: "Please select an image to upload" });
+    } else if (err instanceof multer.MulterError) {
+      return res.json({ error: err });
+    } else if (err) {
+      return res.json({ error: err });
+    }
+
+    User.findOneAndUpdate(
+      { _id: req.body.id },
+      { photo: req.file.filename },
+      { new: true, useFindAndModify: false },
+      (err, result) => {
+        console.log("result: ", result);
+        if (err) {
+          return res.json({ error: errorHandler(err) });
+        } else if (result) {
+          return res.json({ result: result.photo });
+        } else {
+          return res.json({ error: "Invalid user" });
+        }
+      }
+    );
+  });
 };

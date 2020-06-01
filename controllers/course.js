@@ -1,6 +1,5 @@
 const Course = require("../models/course");
 var multer = require("multer");
-
 const { errorHandler } = require("../helphers/dbErrorHandler");
 
 exports.create = (req, res) => {

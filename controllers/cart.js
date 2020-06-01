@@ -34,25 +34,9 @@ exports.list = (req, res) => {
     });
 };
 
-// exports.update = (req, res) => {
-//   const id = req.body;
-
-//   Cart.findOneAndUpdate(
-//     { _id: id._id },
-//     { name: id.name },
-//     { new: true, useFindAndModify: false },
-//     (err, result) => {
-//       if (err) {
-//         return res.status(400).json({ error: errorHandler(err) });
-//       }
-//       return res.json(result);
-//     }
-//   );
-// };
-
-exports.del = (req, res) => {
+exports.remove = (req, res) => {
   const id = req.body;
-  Cart.deleteOne({ _id: id }, (err) => {
+  Cart.deleteOne({ _id: id }, (err, result) => {
     if (err) {
       return res.status(400).json({ error: errorHandler(err) });
     }
