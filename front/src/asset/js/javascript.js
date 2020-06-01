@@ -91,6 +91,25 @@ import jQuery from "jquery";
     }
   });
 
+  ////////////////// Search by course-name in main page ///////////////
+
+  $(document).on("keyup", "#sear-home", function () {
+    var input, filter, card, h6, i, txtValue;
+    input = document.getElementById("sear-home").value;
+
+    filter = input.toUpperCase();
+    card = document.getElementsByClassName("card");
+    for (i = 0; i < card.length; i++) {
+      h6 = card[i].getElementsByTagName("h6")[0];
+      txtValue = h6.textContent || h6.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        card[i].style.display = "inline-block";
+      } else {
+        card[i].style.display = "none";
+      }
+    }
+  });
+
   //////////////////////// Toggle Skills chips NewCourse /////////////////////
 
   for (let i = 0; i < 50; i++) {
