@@ -54,20 +54,20 @@ export const showCartItem = (user) => {
 //     });
 // };
 
-// export const deleteCategory = (delete_Id) => {
-//   // console.log("delete_id: ", delete_Id);
-//   return fetch(`${API}/category/delete`, {
-//     method: "POST",
-//     headers: {
-//       Accept: "application/json",
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(delete_Id),
-//   })
-//     .then((response) => {
-//       return response.json();
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// };
+export const removeCourse = (delete_Id) => {
+  console.log("delete_id: ", delete_Id);
+  return fetch(`${API}/cart/remove`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(delete_Id),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};

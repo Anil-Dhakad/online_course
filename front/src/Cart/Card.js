@@ -6,7 +6,7 @@ import { isAuthenticated } from "../Components/apiCore";
 const Card = (props) => {
   const cart = props.cart;
 
-  console.log("items: ", cart);
+  // console.log("items: ", cart);
 
   const { user } = isAuthenticated();
 

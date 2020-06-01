@@ -1,26 +1,28 @@
 import React, { Fragment, useState, useEffect } from "react";
 import Card from "./Card";
+import { removeCourse } from "./apiCart";
 
 const Cart = (props) => {
   const carts = props.cart;
   console.log("carts: ", carts);
 
   let tprice = 0;
+  let tlength = 0;
 
   carts.forEach((element) => {
-    console.log("element: ", element.course.price);
     tprice = tprice + element.course.price;
+    tlength = tlength + 1;
   });
 
-  const deleteHandler = (_id) => {
+  const removeHandler = (_id) => {
     console.log("id: ", _id);
-    // deleteCourse({ _id }).then((data) => {
-    //   if (data.error) {
-    //     setError(data.error);
-    //   } else {
-    //     window.location.reload();
-    //   }
-    // });
+    removeCourse({ _id }).then((data) => {
+      if (data.error) {
+        setError(data.error);
+      } else {
+        window.location.reload();
+      }
+    });
   };
 
   return (
@@ -33,7 +35,7 @@ const Cart = (props) => {
         <div className="col-lg-8">
           {carts &&
             carts.map((cart, i) => (
-              <Card key={i} cart={cart} clickHandler={deleteHandler} />
+              <Card key={i} cart={cart} clickHandler={removeHandler} />
             ))}
         </div>
         <div className="col-lg-4">
@@ -41,7 +43,12 @@ const Cart = (props) => {
             className="mb-3 bg-white mt-3 p-2 rounded card"
             style={{ width: "100%" }}
           >
-            <h5 className="mb-3">The total amount of</h5>
+            <h6
+              className="mb-3"
+              style={{ color: "#000000", textAlign: "center" }}
+            >
+              Subtotal amount of {tlength} courses
+            </h6>
 
             <ul className="list-group list-group-flush">
               <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
