@@ -4,7 +4,7 @@ import EditCard from "./EditCard";
 import { showAllCategory, showAllSkill, showAllUser } from "../Admin/apiAdmin";
 import { deleteCourse } from "./apiCourse";
 import { isAuthenticated } from "../Components/apiCore";
-import SearchBar from "./SearchBar";
+import SearchBar from "../Components/SearchBar";
 
 const YourCourse = ({ courses }) => {
   const [categories, setCategories] = useState();
