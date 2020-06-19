@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { isAuthenticated } from "../User/apiUser";
+import { isAuthenticated } from "../Components/apiCore";
+import Photo from "./Photo";
 
 const SidebarClient = (props) => {
   const { user } = isAuthenticated();
@@ -16,16 +17,26 @@ const SidebarClient = (props) => {
 
   return (
     <nav id="sidebar">
-      <div className="img bg-wrap text-center py-4 bg_1">
+      <div className="img bg-wrap text-center py-4 bg">
         <div className="user-logo">
-          <div className="img logo"></div>
+          <Photo />
           <h3>{user.name}</h3>
         </div>
       </div>
       <ul className="list-unstyled components mb-5">
         <li className="active">
-          <a href="#">
+          <a onClick={() => props.clickHandler("home")}>
             <span className="fa fa-home mr-3"></span> Home
+          </a>
+        </li>
+        <li className="li">
+          <a onClick={() => props.clickHandler("cart")}>
+            <span className="fa fa-shopping-cart mr-3 notif">
+              <sup className="badge badge-pill badge-primary">
+                {props.count}
+              </sup>
+            </span>
+            Your Cart
           </a>
         </li>
 
@@ -52,14 +63,14 @@ const SidebarClient = (props) => {
               >
                 <span className="fa fa-edit mr-3"></span> Change Password
               </a>
+              <a
+                style={{ padding: "0.3em 2em 0.3em 3.5em" }}
+                // onClick={() => props.clickHandler("changePwd")}
+              >
+                <span className="fa fa-edit mr-3"></span> Become an Instructor
+              </a>
             </ul>
           </div>
-        </li>
-
-        <li>
-          <a href="#">
-            <span className="fa fa-sign-out mr-3"></span> Logout
-          </a>
         </li>
       </ul>
     </nav>

@@ -51,8 +51,9 @@ const Photo = () => {
         />
         <img
           className="img"
-          src={`${URL}/images/user/${photo}`}
-          alt="Card image"
+          src={`/images/user/${photo}`}
+          alt="profile image"
+          title="Change your pic"
           style={{ cursor: "pointer", marginBottom: "0" }}
         />
       </label>

@@ -19,7 +19,6 @@ const SidebarInstructor = (props) => {
     <nav id="sidebar">
       <div className="img bg-wrap text-center py-4 bg">
         <div className="user-logo">
-          {/* <div className="img logo"></div> */}
           <Photo />
           <h3>{user.name}</h3>
         </div>

@@ -21,7 +21,7 @@ const ChangePassword = (props) => {
 
   setTimeout(function () {
     $("#updateMessage").fadeOut("slow");
-  }, 5000);
+  }, 10000);
 
   const { oldPwd, password } = values;
 
@@ -29,10 +29,16 @@ const ChangePassword = (props) => {
     event.preventDefault();
     const _id = user._id;
     changePwd({ _id, oldPwd, password }).then((data) => {
+      console.log(data);
       if (data.error) {
         setError(data.error);
+      } else if (data === "incorrect") {
+        setError(
+          <b style={{ color: "#0e9e0e", fontSize: "1.2em" }}>
+            Incorrect Old Password...
+          </b>
+        );
       } else {
-        console.log(data);
         setError(
           <b style={{ color: "#0e9e0e", fontSize: "1.2em" }} id="updateMessage">
             Password successfully updated...

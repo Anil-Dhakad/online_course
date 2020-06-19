@@ -5,9 +5,10 @@ import { showAllCourse } from "../Course/apiCourse";
 import { showCartItem } from "../Cart/apiCart";
 import NavbarHome from "../Components/NavbarHome";
 import YourCourse from "../Course/YourCourse";
-import ShowCard from "../Course/ShowCard";
+import DefaultPage from "./DefaultPage";
 
 import SidebarInstructor from "./SidebarInstructor";
+import SidebarClient from "./SidebarClient";
 import SidebarAdmin from "../Admin/SidebarAdmin";
 
 import Profile from "./Profile";
@@ -66,26 +67,18 @@ const UserHome = () => {
 
   const clickSidebar = (child) => {
     setValues(child);
-  };
 
-  const homePage = () => {
-    if (cart) {
-      return (
-        <Fragment>
-          {courses &&
-            courses.map((course, i) => {
-              if (course.user._id !== user._id)
-                return (
-                  <ShowCard
-                    key={i}
-                    clickHandler={clickSidebar}
-                    course={course}
-                    cart={cart}
-                  />
-                );
-            })}
-        </Fragment>
-      );
+    ///////////////// Toggle class //////////////////////
+    var ul = document.getElementById("myUL");
+    var li = ul.getElementsByClassName("li");
+    for (var i = 0; i < li.length; i++) {
+      li[i].addEventListener("click", function () {
+        var current = document.getElementsByClassName("active");
+        if (current.length > 0) {
+          current[0].className = current[0].className.replace(" active", "");
+        }
+        this.className += " active";
+      });
     }
   };
 
@@ -95,12 +88,18 @@ const UserHome = () => {
     } else if (user && user.role === "instructor") {
       return <SidebarInstructor count={cartLen} clickHandler={clickSidebar} />;
     } else if (user && user.role === "client") {
-      return <ClientInstructor clickHandler={clickSidebar} />;
+      return <SidebarClient count={cartLen} clickHandler={clickSidebar} />;
     }
   };
   const rightSection = () => {
     if (values === "home") {
-      return <Fragment>{homePage()}</Fragment>;
+      return (
+        <DefaultPage
+          courses={courses}
+          cart={cart}
+          clickHandler={clickSidebar}
+        />
+      );
     } else if (values === "course") {
       return <YourCourse courses={courses} clickHandler={clickSidebar} />;
     } else if (values === "add_category") {
@@ -120,8 +119,14 @@ const UserHome = () => {
     } else {
       if (user && user.role === "admin") {
         return <YourCourse courses={courses} clickHandler={clickSidebar} />;
-      } else {
-        return <Fragment>{homePage()}</Fragment>;
+      } else if (cart && courses) {
+        return (
+          <DefaultPage
+            courses={courses}
+            cart={cart}
+            clickHandler={clickSidebar}
+          />
+        );
       }
     }
   };
