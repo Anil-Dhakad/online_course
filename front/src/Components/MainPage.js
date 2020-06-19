@@ -1,27 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { showAllCourse } from "../Course/apiCourse";
-import { showAllCategory, showAllSkill } from "../Admin/apiAdmin";
+import { showAllCategory } from "../Admin/apiAdmin";
 import ShowCard from "../Course/ShowCard";
 import { searchCourse } from "./apiCore";
+import SkillCheckBox from "./SkillCheckBox";
+import MoreFilter from "./MoreFilter";
+import { prices } from "./priceFilter";
 
 const MainPage = (props) => {
   const [courses, setCourses] = useState();
   const [categories, setCategories] = useState();
-  const [skills, setSkills] = useState();
 
   const [values, setValues] = useState({
     category: "",
     skill: "",
+    sort: "",
+    price: "",
     search: false,
     message: false,
   });
 
-  const changeHandler = (name) => (event) => {
+  const categoryHandler = (name) => (event) => {
+    event.preventDefault();
+
     const value = event.target.value;
+    console.log("category: ", value);
     setValues({ ...values, [name]: value, search: true, message: false });
   };
 
-  const { category, skill, search, message } = values;
+  const { category, skill, sort, price, search, message } = values;
 
   const ShowCourses = () => {
     showAllCourse().then((data) => {
@@ -35,6 +42,7 @@ const MainPage = (props) => {
 
   const showCategories = () => {
     showAllCategory().then((data) => {
+      console.log("showCategory: ", data);
       if (data.error) {
         console.log("showCategories: ", data.error);
       } else {
@@ -43,42 +51,64 @@ const MainPage = (props) => {
     });
   };
 
-  const showSkills = () => {
-    showAllSkill().then((data) => {
-      if (data.error) {
-        console.log("showSkills: ", data.error);
-      } else {
-        setSkills(data);
-      }
-    });
-  };
-
   useEffect(() => {
     showCategories();
-    showSkills();
     ShowCourses();
   }, []);
 
+  const handleCheckBox = (list) => {
+    console.log("handle-check-box", list);
+    setValues({ ...values, skill: list, search: true, message: false });
+  };
+  const handlePriceFilters = (filter1) => {
+    console.log("handle-Price-filters", filter1);
+
+    for (let key in prices) {
+      if (prices[key].id === parseInt(filter1)) {
+        setValues({
+          ...values,
+          price: prices[key].array,
+          search: true,
+          message: false,
+        });
+        break;
+      }
+    }
+  };
+  const handleSortFilters = (filter2) => {
+    console.log("handle-Sort-filters", filter2);
+
+    setValues({
+      ...values,
+      sort: filter2,
+      search: true,
+      message: false,
+    });
+  };
+
   const loadSearch = () => {
     console.log("values: ", values);
-    if (search && category !== "") {
-      searchCourse(values).then((data) => {
-        if (data.error) {
-          console.log("MainPage: ", data.error);
-        } else {
-          setCourses(data);
-          setValues({ ...values, search: false, message: true });
-        }
-      });
-    } else if (search && category === "") {
-      ShowCourses();
-      setValues({ ...values, search: false, message: true });
-    }
+    // if (search) {
+    searchCourse(values).then((data) => {
+      console.log("ddddddddddddddddddddddddddddddd");
+      if (data.error) {
+        console.log("MainPage: ", data.error);
+      } else {
+        setValues({ ...values, search: false, message: true });
+        setCourses(data);
+      }
+    });
+    // }
   };
 
   const showMessage = () => {
     if (message && courses.length < 1) {
-      return <h4>No course found from your search</h4>;
+      return (
+        <h5>
+          <i className="fa fa-info-circle" />
+          &nbsp;&nbsp;No course found from your search
+        </h5>
+      );
     }
   };
 
@@ -98,39 +128,37 @@ const MainPage = (props) => {
           <div className="input-group-prepend">
             <select
               className="btn btn-primary m-1 rounded"
-              onChange={changeHandler("category")}
+              onChange={categoryHandler("category")}
             >
-              <option value="">Category</option>
+              <option value="" className="option">
+                Category
+              </option>
               {categories &&
                 categories.map((c, i) => (
-                  <option key={i} value={c._id}>
+                  <option key={i} value={c._id} className="option">
                     {c.name}
                   </option>
                 ))}
             </select>
           </div>
           <div className="input-group-prepend">
-            <select className="btn btn-secondary m-1 rounded">
-              <option value="">Skill</option>
-              {skills &&
-                skills.map((s, i) => (
-                  <option key={i} value={s._id}>
-                    {s.name}
-                  </option>
-                ))}
-            </select>
+            <SkillCheckBox handleCheckBox={handleCheckBox} />
           </div>
 
           <input
             type="search"
             id="sear-home"
-            className="form-control mt-1 ml-1 mr-1 rounded"
+            className="form-control rounded"
             placeholder="Search by course name"
-            style={{ backgroundPosition: "8px" }}
+            style={{ backgroundPosition: "8px", margin: "0.15em 0.2em" }}
           />
 
-          <div className="input-group-append">
-            <button className="btn btn-info m-1 rounded">Search</button>
+          <div className="input-group-prepend dropdown">
+            <MoreFilter
+              prices={prices}
+              handlePriceFilters={handlePriceFilters}
+              handleSortFilters={handleSortFilters}
+            />
           </div>
         </div>
       </span>
@@ -139,11 +167,12 @@ const MainPage = (props) => {
 
   return (
     <div style={{ padding: "3.1em 0 0 1.5em" }}>
-      {loadSearch()}
+      {values && values.search ? loadSearch() : ""}
+
       {SearchBox()}
       <br />
       <br />
-      <br className="mob" />
+      <br />
       <br className="mob" />
       <br className="mob" />
       {showMessage()}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 import Navbar from "./Navbar";
 import SignUp from "../Components/SignUp";
@@ -14,8 +14,6 @@ const Home = () => {
   const navbarHandler = (navChild) => {
     setChild(navChild);
   };
-
-  useEffect(() => {}, [child]);
 
   const checkAuthentication = () => {
     if (isAuthenticated()) {

@@ -15,7 +15,9 @@ const NavbarHome = (props, history) => {
         <i id="sidebarCollapse" className="fa fa-bars btn btn-primary"></i>
       </div>
 
-      <a className="navbar-brand">Online-Study</a>
+      <div className="navbar-brand" style={{ cursor: "default" }}>
+        Online-Study
+      </div>
       <div className="nav_usr">
         <button
           className="btn btn-primary"
