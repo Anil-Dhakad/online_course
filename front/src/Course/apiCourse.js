@@ -23,7 +23,7 @@ export const showAllCourse = () => {
 };
 
 export const editCourse = (course) => {
-  // console.log("course_Data: ", course);
+  console.log("course_Data: ", course);
   return fetch(`${API}/course/edit`, {
     method: "POST",
     headers: {

@@ -1,6 +1,5 @@
 import React, { Fragment } from "react";
 import moment from "moment";
-import { URL } from "../config";
 import EditCourse from "../Course/EditCourse";
 import EditCoursePhoto from "./EditCoursePhoto";
 
@@ -14,17 +13,15 @@ const EditCard = (props) => {
     const input = new Date(dateString).toLocaleDateString(undefined, options);
     var parts = input.split("/");
     return (
-      (parts[0] < 10 ? "0" : "") +
-      parseInt(parts[0]) +
-      "-" +
       (parts[1] < 10 ? "0" : "") +
       parseInt(parts[1]) +
+      "-" +
+      (parts[0] < 10 ? "0" : "") +
+      parseInt(parts[0]) +
       "-" +
       parseInt(parts[2])
     );
   };
-
-  // console.log(course);
 
   return (
     <Fragment>
@@ -44,7 +41,7 @@ const EditCard = (props) => {
         >
           <img
             className="card-img-top"
-            src={`${URL}/images/course_profile/${course.photo}`}
+            src={`/images/course_profile/${course.photo}`}
             alt="Card image"
             style={{
               width: "100%",
@@ -202,7 +199,7 @@ const EditCard = (props) => {
             </div>
             <div className="modal-body text-body">
               <h6>
-                Are you sure! you want to delete course{" "}
+                Are you sure! you want to delete course&nbsp;
                 <b className="text-warning">{course.name}</b>
                 &nbsp; created by&nbsp;
                 <b className="text-success">{course.user.name}</b> on&nbsp;

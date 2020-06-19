@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from "react";
 import moment from "moment";
-import { URL } from "../config";
 import { isAuthenticated } from "../Components/apiCore";
 import { addCartItem } from "../Cart/apiCart";
 
@@ -12,13 +11,13 @@ const ShowCard = (props) => {
 
   const { user } = isAuthenticated();
 
-  console.log("Show-Card: ", carts);
+  // console.log("Show-Card: ", props.cart);
 
   let d = 0;
 
   if (user) {
     carts.forEach((element) => {
-      if (element.course === course._id) {
+      if (element.course._id === course._id) {
         d = 1;
       }
     });
@@ -121,7 +120,7 @@ const ShowCard = (props) => {
         >
           <img
             className="card-img-top"
-            src={`${URL}/images/course_profile/${course.photo}`}
+            src={`/images/course_profile/${course.photo}`}
             alt="Card image"
             style={{ width: "100%", height: "30vh" }}
           />

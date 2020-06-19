@@ -1,5 +1,4 @@
 import React, { useState, Fragment } from "react";
-import { URL } from "../config";
 import { editPhoto } from "./apiCourse";
 
 const EditCoursePhoto = ({ course }) => {
@@ -62,7 +61,7 @@ const EditCoursePhoto = ({ course }) => {
     <div className="form-group">
       <img
         className="card-img-top"
-        src={`${URL}/images/course_profile/${course.photo}`}
+        src={`/images/course_profile/${course.photo}`}
         alt="Card image"
         style={{
           width: "100%",

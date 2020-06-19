@@ -3,13 +3,7 @@ import { editCourse } from "./apiCourse";
 import $ from "jquery";
 
 const EditCourse = ({ categories, skills, course }) => {
-  console.log("course: ", course.skills[0]);
-  console.log("course-JSON : ", JSON.stringify(course.skills[0]));
-
-  // var list = [];
-  course.skills.forEach((e) => {
-    console.log("e: ", e[2]);
-  });
+  // console.log("course: ", course.skills);
 
   const [values, setValues] = useState({
     name: course.name,
@@ -17,17 +11,35 @@ const EditCourse = ({ categories, skills, course }) => {
     price: course.price,
     category: course.category._id,
     categoryName: course.category.name,
-    photo: course.photo,
   });
-  const [items, setSkill] = useState(course.skills[0]);
+  const [items, setSkill] = useState(course.skills);
 
   const [error, setError] = useState();
 
   const handleChange = (event) => {
     setError("");
     const name = event.target.name;
-    const value = name === "photo" ? event.target.files[0] : event.target.value;
+    const value = event.target.value;
     setValues({ ...values, [name]: value });
+  };
+
+  const searchSkill = (idd) => {
+    $(document).on("keyup", "#search" + idd, function () {
+      var input, filter, ul, li, a, i, txtValue;
+      input = document.getElementById("search" + idd).value;
+
+      filter = input.toUpperCase();
+      li = document.getElementsByClassName("chip");
+      for (i = 0; i < li.length; i++) {
+        a = li[i].getElementsByTagName("button")[0];
+        txtValue = a.textContent || a.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          li[i].style.display = "";
+        } else {
+          li[i].style.display = "none";
+        }
+      }
+    });
   };
 
   const skillHandler = (event) => {
@@ -44,7 +56,7 @@ const EditCourse = ({ categories, skills, course }) => {
     }
   };
 
-  const { name, description, price, category, categoryName, photo } = values;
+  const { name, description, price, category, categoryName } = values;
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -55,8 +67,7 @@ const EditCourse = ({ categories, skills, course }) => {
       name === "" ||
       description === "" ||
       category === "" ||
-      price === "" ||
-      photo === ""
+      price === ""
     ) {
       setError(
         <div className="alert alert-danger p-1">
@@ -78,34 +89,34 @@ const EditCourse = ({ categories, skills, course }) => {
         skills: items,
       };
 
-      // editCourse(courseData).then((data) => {
-      //   if (data.error === "all fields") {
-      //     setError(
-      //       <div className="alert alert-danger p-1">
-      //         <strong style={{ color: "red" }}>
-      //           <i className="fa fa-info-circle" />
-      //           &nbsp; All fields are required...
-      //         </strong>
-      //       </div>
-      //     );
-      //   } else if (data.msg === "updated") {
-      //     window.location.reload();
-      //   } else if (data.error) {
-      //     setError(
-      //       <div className="alert alert-danger p-2">
-      //         <i className="fa fa-info-circle" />
-      //         &nbsp;
-      //         <strong>{data.error}</strong>
-      //       </div>
-      //     );
-      //   } else {
-      //     setError(
-      //       <div className="alert alert-danger p-2">
-      //         <strong>Something went wrong...</strong>
-      //       </div>
-      //     );
-      //   }
-      // });
+      editCourse(courseData).then((data) => {
+        if (data.error === "all fields") {
+          setError(
+            <div className="alert alert-danger p-1">
+              <strong style={{ color: "red" }}>
+                <i className="fa fa-info-circle" />
+                &nbsp; All fields are required...
+              </strong>
+            </div>
+          );
+        } else if (data.msg === "updated") {
+          window.location.reload();
+        } else if (data.error) {
+          setError(
+            <div className="alert alert-danger p-2">
+              <i className="fa fa-info-circle" />
+              &nbsp;
+              <strong>{data.error}</strong>
+            </div>
+          );
+        } else {
+          setError(
+            <div className="alert alert-danger p-2">
+              <strong>Something went wrong...</strong>
+            </div>
+          );
+        }
+      });
     }
   };
 
@@ -228,37 +239,57 @@ const EditCourse = ({ categories, skills, course }) => {
           ></i>
           <input
             type="text"
-            id="search"
+            id={"search" + course._id}
             placeholder="Search..."
             title="Search Skills"
-            className="form-control input-sm"
+            className="form-control input-sm editSearch"
             style={{
               // width: "50%",
               height: "5vh",
               display: "inline",
             }}
+            onChange={() => searchSkill(course._id)}
           />
         </div>
       </div>
 
       <div className="form-group search_box">
         {skills &&
-          skills.map((s, i) => (
-            <div
-              className="chip"
-              id={"chips" + s._id + course._id}
-              key={i}
-              onClick={skillHandler}
-              // onKeyPress={() => changeClass(i)}
-            >
-              <button
-                style={{ background: "transparent", border: "transparent" }}
-                value={s._id}
-              >
-                {s.name}
-              </button>
-            </div>
-          ))}
+          skills.map((s, i) => {
+            if (course.skills.includes(s._id)) {
+              return (
+                <div
+                  className="chip chip-change"
+                  id={"chips" + s._id + course._id}
+                  key={i}
+                  onClick={skillHandler}
+                >
+                  <button
+                    style={{ background: "transparent", border: "transparent" }}
+                    value={s._id}
+                  >
+                    {s.name}
+                  </button>
+                </div>
+              );
+            } else {
+              return (
+                <div
+                  className="chip"
+                  id={"chips" + s._id + course._id}
+                  key={i}
+                  onClick={skillHandler}
+                >
+                  <button
+                    style={{ background: "transparent", border: "transparent" }}
+                    value={s._id}
+                  >
+                    {s.name}
+                  </button>
+                </div>
+              );
+            }
+          })}
       </div>
 
       <hr style={{ width: "106%", margin: "2% 0% 2% -3%" }} />
