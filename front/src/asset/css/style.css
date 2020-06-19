@@ -30,6 +30,9 @@ body {
   .signup-form .hint-text {
     margin-bottom: 10px;
   }
+  .mob {
+    display: none;
+  }
 }
 
 .navbar-brand {
@@ -274,7 +277,8 @@ tr:nth-child(even) {
 
 /* //////////////////// Search /////////////////////////////// */
 
-input[id="search"] {
+input[id="search"],
+.editSearch {
   width: 130px;
   box-sizing: border-box;
   border: 2px solid #ccc;
@@ -288,7 +292,8 @@ input[id="search"] {
   transition: width 0.3s ease-in-out !important;
 }
 
-input[id="search"]:focus {
+input[id="search"]:focus,
+.editSearch:focus {
   width: 60%;
 }
 
@@ -308,7 +313,28 @@ input[type="search"] {
   background: antiquewhite;
   border: 1px solid #d6c0c0;
 }
-
+.dropdown-toggle::after {
+  right: 0.2em !important;
+}
+.option {
+  background-color: #ffffff;
+  color: #000000;
+  padding: 0.2em;
+  border: none;
+}
+.skill-li {
+  border-bottom: 1px solid #efe4e4;
+  cursor: pointer;
+}
+.skill-li:hover {
+  background-color: #7aa8e2;
+}
+.skill-li-change {
+  background-color: #d6dfe8;
+}
+.custom-control {
+  padding-left: 3.5em !important;
+}
 /* /////////////////////// Card /////////////////////////// */
 
 .card {

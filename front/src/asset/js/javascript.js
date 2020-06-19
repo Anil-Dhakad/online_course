@@ -24,9 +24,10 @@ import jQuery from "jquery";
     document.getElementById("mySearch").style.display = "block";
   });
 
-  ////////////////// Search by skills ////////////////////
+  ////////////////// Search by skills - NewCourse ////////////////////
 
   $(document).on("keyup", "#search", function () {
+    console.log("search: ");
     var input, filter, ul, li, a, i, txtValue;
     input = document.getElementById("search").value;
 
@@ -110,6 +111,15 @@ import jQuery from "jquery";
     }
   });
 
+  ////////////////// Search by Skill name in main page ///////////////
+
+  $(document).on("keyup", "#mySkillSearch", function () {
+    let value = $(this).val().toLowerCase();
+    $(".skill-li").filter(function () {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+    });
+  });
+
   //////////////////////// Toggle Skills chips NewCourse /////////////////////
 
   for (let i = 0; i < 50; i++) {
@@ -117,17 +127,4 @@ import jQuery from "jquery";
       $("#chip" + i).toggleClass("chip-change");
     });
   }
-
-  var header = document.getElementById("myUL");
-  console.log("header: ", header);
-  // var btns = header.getElementsByClassName("btn");
-  // for (var i = 0; i < btns.length; i++) {
-  //   btns[i].addEventListener("click", function () {
-  //     var current = document.getElementsByClassName("active");
-  //     if (current.length > 0) {
-  //       current[0].className = current[0].className.replace(" active", "");
-  //     }
-  //     this.className += " active";
-  //   });
-  // }
 })(jQuery);
