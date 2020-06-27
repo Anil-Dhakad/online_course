@@ -113,66 +113,25 @@ exports.isInstructor = (req, res) => {
 };
 
 exports.changePwd = (req, res) => {
-  const user = req.body;
+  const u = req.body;
 
-  // console.log("user: ", user);
-
-  // User.findOne({ _id: user._id }, (err, data) => {
-  //   if (err || !data) {
-  //     return res.status(400).json({
-  //       error: "Not a valid user...",
-  //     });
-  //   }
-  //   console.log("data: ", data);
-  //   User.findOneAndUpdate(
-  //     { _id: user._id, password: data.authenticate(user.oldPwd) },
-  //     { password: user.password },
-  //     { new: true, useFindAndModify: false },
-  //     (err, result) => {
-  //       console.log("result: ", result);
-  //       if (err) {
-  //         return res.status(400).json({ error: errorHandler(err) });
-  //       }
-  //       else if(!result) {
-  //         return res.json('no');
-  //       }
-  //       return res.json('yes');
-  //     }
-  //   );
-  // });
-
-  // User.findOneAndUpdate(
-  //   { _id: user._id, password: authenticate(user.oldPwd) },
-  //   { password: user.password },
-  //   { new: true, useFindAndModify: false },
-  //   (err, result) => {
-  //     console.log("result: ", result);
-  //     if (err) {
-  //       return res.status(400).json({ error: errorHandler(err) });
-  //     }
-  //     return res.json(result);
-  //   }
-  // );
-
-  User.findOne({ _id: user._id }, (err, result) => {
+  User.findOne({ _id: u._id }, (err, result) => {
     if (err || !result) {
       return res.status(400).json({
         error: "Not a valid user...",
       });
-    } else if (!result.authenticate(user.oldPwd)) {
-      return res.status(401).json({
-        error: "Password not matches...",
-      });
+    } else if (!result.authenticate(u.oldPwd)) {
+      return res.json("incorrect");
     } else {
+      const pwd = result.encryptPassword(u.password);
       User.findOneAndUpdate(
-        { _id: user._id },
-        { password: user.password },
+        { _id: u._id },
+        { hashed_password: pwd },
         { new: true, useFindAndModify: false },
         (err, data) => {
           if (err) {
             return res.status(400).json({ error: errorHandler(err) });
           }
-          console.log("data: ", data);
           return res.json("yes");
         }
       );
@@ -181,7 +140,7 @@ exports.changePwd = (req, res) => {
 };
 
 exports.list = (req, res) => {
-  User.find()
+  User.find({ role: { $ne: "admin" } })
     .select("-hashed_password")
     .select("-salt")
     .select("-updatedAt")

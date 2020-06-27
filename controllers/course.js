@@ -11,6 +11,10 @@ exports.create = (req, res) => {
     console.log("data: ", req.body);
     console.log("file: ", req.file);
 
+    let skill = req.body.skills;
+
+    let list = skill.split(",");
+
     const { name, description, price, category, skills, user } = req.body;
 
     if (req.fileValidationError) {
@@ -32,7 +36,14 @@ exports.create = (req, res) => {
       return res.json({ error: "all fields" });
     }
 
-    let course = new Course(req.body);
+    let course = new Course();
+    course._id = req.body._id;
+    course.name = req.body.name;
+    course.description = req.body.description;
+    course.price = req.body.price;
+    course.category = req.body.category;
+    course.user = req.body.user;
+    course.skills = list;
     course.photo = req.file.filename;
 
     Course.find({ name: name })
@@ -52,22 +63,8 @@ exports.create = (req, res) => {
   });
 };
 
-// var storage = multer.diskStorage({
-//   destination: (req, file, callback) => {
-//     console.log("file-122:", file);
-//     callback(null, "front/public/images/course_profile");
-//   },
-//   filename: (req, file, callback) => {
-//     console.log("file-2222:", file);
-//     var filetype = file.mimetype;
-//     var fileformate = filetype.split("/")[1];
-//     callback(null, Date.now() + "." + fileformate);
-//   },
-// });
-// var upload = multer({ storage: storage });
-
 exports.update = (req, res) => {
-  console.log("data: ", req.body);
+  // console.log("data: ", req.body);
   const { id, name, description, price, category, skills } = req.body;
 
   if (!name || !description || !price || !category || !skills) {
@@ -80,10 +77,11 @@ exports.update = (req, res) => {
         description: description,
         price: price,
         category: category,
+        skills: skills,
       },
       { new: true, useFindAndModify: false },
       (err, result) => {
-        console.log("result: ", result);
+        // console.log("result: ", result);
         if (err) {
           return res.json({ error: errorHandler(err) });
         } else if (result) {
@@ -102,8 +100,8 @@ exports.updatePhoto = (req, res) => {
   );
 
   upload(req, res, (err) => {
-    console.log("data: ", req.body);
-    console.log("file: ", req.file);
+    // console.log("data: ", req.body);
+    // console.log("file: ", req.file);
 
     if (req.fileValidationError) {
       return res.send(req.fileValidationError);
@@ -120,7 +118,7 @@ exports.updatePhoto = (req, res) => {
       { photo: req.file.filename },
       { new: true, useFindAndModify: false },
       (err, result) => {
-        console.log("result: ", result);
+        // console.log("result: ", result);
         if (err) {
           return res.json({ error: errorHandler(err) });
         } else if (result) {
@@ -154,21 +152,90 @@ exports.list = (req, res) => {
       if (err) {
         return res.status(400).json({ error: errorHandler(err) });
       }
+      // console.log("result: ", result);
+      // result.hashed_password = undefined;
       return res.json(result);
     });
 };
 
 exports.search = (req, res) => {
-  // console.log("body: ", req.body.category);
+  console.log("body: ", req.body);
   const d = req.body;
-  Course.find({ category: d.category })
+
+  let sortBy = "";
+  let order = "";
+  if (d.sort === "new") {
+    sortBy = "createAt";
+    order = "desc";
+  } else if (d.sort === "low") {
+    sortBy = "price";
+    order = "asc";
+  } else if (d.sort === "high") {
+    sortBy = "price";
+    order = "desc";
+  } else {
+    sortBy = "name";
+    order = "asc";
+  }
+
+  let great = 0;
+  let less = 10000;
+
+  if (d.price !== "") {
+    great = d.price[0];
+    less = d.price[1];
+  }
+
+  let filter = {};
+  if (d.category !== "") {
+    filter["category"] = d.category;
+    filter["price"] = { $gte: great, $lte: less };
+  } else {
+    filter["price"] = { $gte: great, $lte: less };
+  }
+
+  // console.log("filter: ", filter);
+
+  Course.find(filter)
     .populate("category")
     .populate("user")
     .populate("Skills")
+    .sort([[sortBy, order]])
     .exec((err, result) => {
+      // console.log("result: ", result);
+      result.forEach((element) => {
+        console.log("result: ", element.name);
+      });
       if (err) {
         return res.status(400).json({ error: errorHandler(err) });
+      } else if (d.skill != "") {
+        let Dict = {};
+        result.forEach((element) => {
+          console.log("element: ", element.name);
+          element.skills.forEach((key) => {
+            if (Dict[key]) {
+              Dict[key].push(element);
+            } else {
+              Dict[key] = [element];
+            }
+          });
+        });
+        skill_list = d.skill;
+
+        let array = [];
+        skill_list.forEach((skill) => {
+          if (skill in Dict) {
+            Dict[skill].forEach((s) => {
+              console.log("s: ", s.name);
+              if (!array.includes(s)) {
+                array.push(s);
+              }
+            });
+          }
+        });
+        return res.json(array);
+      } else {
+        return res.json(result);
       }
-      return res.json(result);
     });
 };
