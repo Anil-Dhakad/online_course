@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from "react";
 import moment from "moment";
-import { URL } from "../config";
 import { isAuthenticated } from "../Components/apiCore";
 
 const Card = (props) => {
@@ -23,7 +22,7 @@ const Card = (props) => {
       >
         <img
           className="card-img-top"
-          src={`${URL}/images/course_profile/${cart.course.photo}`}
+          src={`/images/course_profile/${cart.course.photo}`}
           alt="Card image"
           style={{ width: "100%", height: "25vh" }}
         />
