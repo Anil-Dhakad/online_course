@@ -1,11 +1,12 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { deleteUser, showAllUser } from "./apiAdmin";
+import $ from "jquery";
 
 // import "../asset/css/jquery.dataTables.css";
 // import "../asset/css/dataTable.css";
 // import "../asset/css/shCore.css";
 // import "../asset/js/jquery.dataTables";
-// import "../asset/js/shCore";
+// import "../asset/js/shCore.js";
 // import "../asset/js/dataTable";
 
 const ShowInstructors = ({ courses }) => {
@@ -21,6 +22,11 @@ const ShowInstructors = ({ courses }) => {
         setUsers(data);
       }
     });
+  };
+  const jqueryTable = () => {
+    // $("#example").dataTable({
+    //   lengthMenu: [[1000], [1000]],
+    // });
   };
 
   useEffect(() => {
@@ -112,7 +118,12 @@ const ShowInstructors = ({ courses }) => {
     );
   };
 
-  return <Fragment>{showForm()}</Fragment>;
+  return (
+    <Fragment>
+      {jqueryTable()}
+      {showForm()}
+    </Fragment>
+  );
 };
 
 export default ShowInstructors;

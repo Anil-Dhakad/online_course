@@ -1,6 +1,5 @@
 import React from "react";
 import { isAuthenticated } from "../Components/apiCore";
-import Photo from "../User/Photo";
 
 const Sidebar_Admin = (props) => {
   const { user } = isAuthenticated();
@@ -23,7 +22,11 @@ const Sidebar_Admin = (props) => {
             ></i>
           </div> */}
           {/* <div className="img logo"></div> */}
-          <Photo />
+          <img
+            className="img"
+            src={`/images/user/${user.photo}`}
+            alt="sample image"
+          />
           <h3>{user.name}</h3>
         </div>
       </div>
@@ -56,11 +59,6 @@ const Sidebar_Admin = (props) => {
           <a onClick={() => props.clickHandler("all_instructor")}>
             <span className="fa fa-chalkboard-teacher mr-3 notif"></span>
             All Instructor
-          </a>
-        </li>
-        <li className="li">
-          <a>
-            <span className="fa fa-cog mr-3"></span> Settings
           </a>
         </li>
       </ul>
