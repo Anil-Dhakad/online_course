@@ -11,6 +11,7 @@ const MainPage = (props) => {
   const [courses, setCourses] = useState();
   const [categories, setCategories] = useState();
 
+  const [items, setItems] = useState([]);
   const [values, setValues] = useState({
     category: "",
     skill: "",
@@ -56,10 +57,59 @@ const MainPage = (props) => {
     ShowCourses();
   }, []);
 
-  const handleCheckBox = (list) => {
-    console.log("handle-check-box", list);
-    setValues({ ...values, skill: list, search: true, message: false });
+  const itemSelector = async (id) => {
+    if (items.find((element) => element === id)) {
+      await items.splice(items.indexOf(id), 1);
+      return items;
+    } else {
+      await setItems([...items, id]);
+      return items;
+    }
   };
+
+  const handleCheckBox = (id) => {
+    console.log("handle-check-box", id);
+
+    new Promise((resolve, reject) => {
+      if (items.find((element) => element === id)) {
+        items.splice(items.indexOf(id), 1);
+        resolve();
+      } else {
+        setItems([...items, id]);
+        resolve();
+      }
+    }).then(() => {
+      setValues({
+        ...values,
+        skill: items,
+        search: true,
+        message: false,
+      });
+    });
+  };
+
+  // return Promise.resolve()
+  //   .then(() => {
+  //     if (items.find((element) => element === id)) {
+  //       items.splice(items.indexOf(id), 1);
+  //       console.log("items-0000: ", items);
+  //       return items;
+  //     } else {
+  //       setItems([...items, id]);
+  //       console.log("items-1111: ", items);
+  //       return items;
+  //     }
+  //   })
+  //   .then((items) => {
+  //     console.log("items-222: ", items);
+  //     setValues({
+  //       ...values,
+  //       skill: items,
+  //       search: true,
+  //       message: false,
+  //     });
+  //   });
+
   const handlePriceFilters = (filter1) => {
     console.log("handle-Price-filters", filter1);
 
@@ -142,7 +192,7 @@ const MainPage = (props) => {
             </select>
           </div>
           <div className="input-group-prepend">
-            <SkillCheckBox handleCheckBox={handleCheckBox} />
+            <SkillCheckBox skilled={skill} handleCheckBox={handleCheckBox} />
           </div>
 
           <input

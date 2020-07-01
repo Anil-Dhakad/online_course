@@ -5,36 +5,17 @@ import $ from "jquery";
 const SkillCheckBox = ({ handleCheckBox }) => {
   const [skills, setSkills] = useState();
 
-  const skillHandler = () => {
-    var options = [];
+  const skillHandler = (val) => {
+    $("#li" + val).toggleClass("skill-li-change");
 
-    $(".ul-menu li").on("click", function (event) {
-      console.log("Skill-Check-Box: ");
-      var $target = $(event.currentTarget),
-        val = $target.attr("data-value"),
-        $inp = $target.find("input"),
-        idx;
-
-      $("#li" + val).toggleClass("skill-li-change");
-
-      if ((idx = options.indexOf(val)) > -1) {
-        options.splice(idx, 1);
-        setTimeout(function () {
-          $inp.prop("checked", false);
-        }, 0);
-      } else {
-        options.push(val);
-        setTimeout(function () {
-          $inp.prop("checked", true);
-        }, 0);
-      }
-
-      //   $(event.target).blur();
-
-      console.log(options);
-      handleCheckBox(options);
-      return false;
-    });
+    var checkBox = document.getElementById("input" + val);
+    if (checkBox.checked == true) {
+      checkBox.checked = false;
+    } else {
+      checkBox.checked = true;
+    }
+    console.log("option: ", val);
+    handleCheckBox(val);
   };
 
   const showSkills = () => {
@@ -64,7 +45,7 @@ const SkillCheckBox = ({ handleCheckBox }) => {
           Choose Skills&nbsp;&nbsp;
           <span className="caret"></span>
         </button>
-        <ul className="dropdown-menu ul-menu" onClick={skillHandler}>
+        <ul className="dropdown-menu ul-menu">
           <li>
             <input
               className="form-control"
@@ -79,11 +60,11 @@ const SkillCheckBox = ({ handleCheckBox }) => {
             skills.map((s, i) => (
               <li
                 key={i}
-                data-value={s._id}
                 id={"li" + s._id}
                 className="skill-li pl-2"
+                onClick={() => skillHandler(s._id)}
               >
-                <input type="checkbox" className="mr-2" />
+                <input type="checkbox" id={"input" + s._id} className="mr-2" />
                 {s.name}
               </li>
             ))}
