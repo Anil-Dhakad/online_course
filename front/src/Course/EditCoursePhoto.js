@@ -104,6 +104,8 @@ const EditCoursePhoto = ({ course }) => {
             className="btn btn-danger"
             style={{ marginLeft: "2%" }}
             data-dismiss="modal"
+            data-toggle="modal"
+            data-target={"#e" + course._id}
           >
             Cancel
           </button>

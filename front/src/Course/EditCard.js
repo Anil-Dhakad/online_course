@@ -110,6 +110,13 @@ const EditCard = (props) => {
               style={{ padding: "0.5rem 1rem 0.5rem" }}
             >
               <button
+                className="btn btn-primary"
+                data-dismiss="modal"
+                onClick={() => props.clickHandler("detail-" + course._id)}
+              >
+                View Details
+              </button>
+              {/* <button
                 className="btn btn-warning"
                 data-dismiss="modal"
                 data-toggle="modal"
@@ -124,7 +131,7 @@ const EditCard = (props) => {
                 data-target={"#del" + course._id}
               >
                 Delete Course
-              </button>
+              </button> */}
             </div>
           </div>
         </div>

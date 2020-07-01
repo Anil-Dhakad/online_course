@@ -6,7 +6,7 @@ import { deleteCourse } from "./apiCourse";
 import { isAuthenticated } from "../Components/apiCore";
 import SearchBar from "../Components/SearchBar";
 
-const YourCourse = ({ courses }) => {
+const YourCourse = ({ courses, clickHandler }) => {
   const [categories, setCategories] = useState();
   const [skills, setSkills] = useState();
   const [users, setUsers] = useState();
@@ -79,6 +79,7 @@ const YourCourse = ({ courses }) => {
                 skills={skills}
                 course={course}
                 delHandler={deleteHandler}
+                clickHandler={clickHandler}
               />
             );
           } else if (course.user._id === user._id)
@@ -89,6 +90,7 @@ const YourCourse = ({ courses }) => {
                 skills={skills}
                 course={course}
                 delHandler={deleteHandler}
+                clickHandler={clickHandler}
               />
             );
         })}
