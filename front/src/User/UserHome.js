@@ -23,6 +23,7 @@ import ShowClients from "../Admin/ShowClients";
 import "../asset/css/style.css";
 import "../asset/css/sidebar.css";
 import "../asset/js/javascript";
+import CourseDetail from "../Course/CourseDetail";
 
 const UserHome = () => {
   console.log("USERHOME");
@@ -92,6 +93,11 @@ const UserHome = () => {
     }
   };
   const rightSection = () => {
+    let abc = "";
+    if (values && values.includes("detail-")) {
+      abc = values.split("-")[0];
+    }
+
     if (values === "home") {
       return (
         <DefaultPage
@@ -102,6 +108,8 @@ const UserHome = () => {
       );
     } else if (values === "course") {
       return <YourCourse courses={courses} clickHandler={clickSidebar} />;
+    } else if (abc === "detail") {
+      return <CourseDetail courses={courses} zz={values.split("-")[1]} />;
     } else if (values === "add_category") {
       return <AddCategory />;
     } else if (values === "add_skill") {
