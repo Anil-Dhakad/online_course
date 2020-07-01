@@ -13,6 +13,7 @@ const categoryRoutes = require("./routes/category");
 const skillRoutes = require("./routes/skills");
 const courseRoutes = require("./routes/course");
 const cartRoutes = require("./routes/cart");
+const sectionRoutes = require("./routes/section");
 
 //db connection
 mongoose
@@ -38,6 +39,7 @@ app.use("/api", categoryRoutes);
 app.use("/api", skillRoutes);
 app.use("/api", courseRoutes);
 app.use("/api", cartRoutes);
+app.use("/api", sectionRoutes);
 
 const port = process.env.PORT || 8000;
 
