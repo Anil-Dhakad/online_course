@@ -1,11 +1,32 @@
 import React, { useState, useEffect, Fragment } from "react";
+import { createSection, showAllSection } from "./apiLecture";
 
-const NewSection = () => {
+const NewSection = ({ course }) => {
+  // console.log("course: ", course);
   const [values, setValues] = useState({
-    courseId: "",
-    sectionNo: "",
+    courseId: course._id,
+    sectionNo: "1",
     name: "",
   });
+  const [error, setError] = useState();
+
+  const getSection = () => {
+    showAllSection(course._id).then((data) => {
+      // console.log("data-section: ", data);
+      if (data.error) {
+        console.log("getCourseById: ", data.error);
+      } else if (data.length !== 0) {
+        setValues({
+          ...values,
+          sectionNo: data[data.length - 1].sectionNo + 1,
+        });
+      }
+    });
+  };
+
+  useEffect(() => {
+    getSection();
+  }, []);
 
   const handleChange = (event) => {
     setError("");
@@ -32,41 +53,30 @@ const NewSection = () => {
     } else {
       setError("");
 
-      createCourse(formData).then((data) => {
-        data = data.data;
-        if (data.error === "all fields") {
-          setError(
-            <div className="alert alert-danger p-1">
-              <strong style={{ color: "red" }}>
-                <i className="fa fa-info-circle" />
-                &nbsp; All fields are required...
-              </strong>
-            </div>
-          );
-        } else if (data.msg === "not") {
+      createSection(values).then((data) => {
+        // data = data.data;
+        console.log("data:", data);
+        if (data.error === "not") {
           setError(
             <div className="alert alert-warning p-2">
               <strong>
-                <i className="fa fa-info-circle" />
-                &nbsp; Course <b style={{ color: "#30bd30" }}>{name}</b> is
-                already available...
+                <i
+                  className="fa fa-info-circle"
+                  style={{ fontSize: "1.2em", margin: "0.3em -0.2em" }}
+                />
+                &nbsp;&nbsp;&nbsp;&nbsp; Section &nbsp;
+                <b style={{ color: "#30bd30" }}>{name}</b> is already
+                available...
               </strong>
             </div>
           );
-        } else if (data.msg === "created") {
+        } else if (data.res) {
           setError(
             <div className="alert alert-success p-2">
               <strong>
-                Course <b style={{ color: "#30bd30" }}>{name}</b> is
+                Section <b style={{ color: "#30bd30" }}>{name}</b> is
                 successfully created...
               </strong>
-            </div>
-          );
-          window.location.reload();
-        } else if (data.error) {
-          setError(
-            <div className="alert alert-danger p-2">
-              <strong>{data.error}</strong>
             </div>
           );
         } else {
@@ -82,81 +92,69 @@ const NewSection = () => {
 
   return (
     <div className="form-group">
-      <div
-        className="progress"
-        style={{
-          height: "1.4rem",
-          fontSize: "1rem",
-          fontWeight: "bolder",
-          border: "1px solid #76acde",
-        }}
-      >
-        <div
-          className="progress-bar progress-bar-striped active"
-          role="progressbar"
-          aria-valuenow="40"
-          aria-valuemin="0"
-          aria-valuemax="100"
-          style={{
-            width: "40%",
-            animation: "progress-bar-stripes 1s linear infinite",
-          }}
-        >
-          40%
-        </div>
-      </div>
-
-      <br />
-      <center>
-        <form>
-          <label className="btn btn-secondary" style={{ width: "90%" }}>
-            <input
-              type="file"
-              name="video"
-              accept="video/*"
-              required
-              onChange={handleChange}
-              style={{ float: "left", outline: "0", cursor: "pointer" }}
-            />
+      <form onSubmit={submitHandler}>
+        <div className="form-group">
+          {error}
+          <label
+            style={{ margin: "1em 0 0", width: "25%", fontWeight: "bold" }}
+          >
+            Course :
           </label>
-          <br />
+          <label style={{ margin: "1em 0 0", float: "right", width: "74%" }}>
+            {course.name}
+          </label>
+        </div>
+        <div className="form-group">
+          <label
+            style={{ margin: "0.5em 0 0", width: "25%", fontWeight: "bold" }}
+          >
+            Section No.:
+          </label>
           <input
+            type="number"
+            name="sectionNo"
             className="form-control"
-            type="text"
-            name="title"
-            placeholder="Add Title"
             required
+            value={sectionNo}
             onChange={handleChange}
-            style={{ width: "90%", paddingLeft: "12px" }}
+            style={{ float: "right", width: "74%", paddingLeft: "0.5em" }}
           />
+        </div>
+        <div className="form-group">
+          <label
+            style={{ margin: "0.5em 0 0", width: "25%", fontWeight: "bold" }}
+          >
+            Section Name:
+          </label>
+          <input
+            type="text"
+            name="name"
+            className="form-control"
+            required
+            style={{ float: "right", width: "74%", paddingLeft: "0.5em" }}
+            onChange={handleChange}
+          />
+        </div>
 
-          <br />
-
+        <br />
+        <center>
           <button
             type="submit"
             className="btn btn-success"
             style={{ marginRight: "2%" }}
           >
-            <i
-              className="fas fa-upload m-0"
-              style={{
-                position: "relative",
-                fontSize: "1em",
-                color: "#000000",
-              }}
-            />
-            &nbsp; Upload
+            Submit
           </button>
           <button
             type="button"
-            className="btn btn-danger"
+            className="btn btn-info"
             style={{ marginLeft: "2%" }}
             data-dismiss="modal"
           >
             Cancel
           </button>
-        </form>
-      </center>
+        </center>
+      </form>
     </div>
   );
 };
