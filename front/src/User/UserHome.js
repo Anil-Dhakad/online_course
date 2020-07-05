@@ -109,7 +109,7 @@ const UserHome = () => {
     } else if (values === "course") {
       return <YourCourse courses={courses} clickHandler={clickSidebar} />;
     } else if (abc === "detail") {
-      return <CourseDetail courses={courses} zz={values.split("-")[1]} />;
+      return <CourseDetail courseId={values.split("-")[1]} />;
     } else if (values === "add_category") {
       return <AddCategory />;
     } else if (values === "add_skill") {
