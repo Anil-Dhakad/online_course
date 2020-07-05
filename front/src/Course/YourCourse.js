@@ -2,7 +2,6 @@ import React, { Fragment, useState, useEffect } from "react";
 import NewCourse from "./NewCourse";
 import EditCard from "./EditCard";
 import { showAllCategory, showAllSkill, showAllUser } from "../Admin/apiAdmin";
-import { deleteCourse } from "./apiCourse";
 import { isAuthenticated } from "../Components/apiCore";
 import SearchBar from "../Components/SearchBar";
 
@@ -49,17 +48,6 @@ const YourCourse = ({ courses, clickHandler }) => {
 
   const { user } = isAuthenticated();
 
-  const deleteHandler = (_id) => {
-    // console.log("id: ", _id);
-    deleteCourse({ _id }).then((data) => {
-      if (data.error) {
-        setError(data.error);
-      } else {
-        window.location.reload();
-      }
-    });
-  };
-
   return (
     <Fragment>
       <center>
@@ -78,7 +66,6 @@ const YourCourse = ({ courses, clickHandler }) => {
                 categories={categories}
                 skills={skills}
                 course={course}
-                delHandler={deleteHandler}
                 clickHandler={clickHandler}
               />
             );
@@ -89,7 +76,6 @@ const YourCourse = ({ courses, clickHandler }) => {
                 categories={categories}
                 skills={skills}
                 course={course}
-                delHandler={deleteHandler}
                 clickHandler={clickHandler}
               />
             );

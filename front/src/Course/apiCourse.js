@@ -66,3 +66,13 @@ export const deleteCourse = (delete_Id) => {
       console.log(err);
     });
 };
+
+export const getCourse = (id) => {
+  return fetch(`${API}/course/${id}`, {
+    method: "GET",
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => console.log(err));
+};

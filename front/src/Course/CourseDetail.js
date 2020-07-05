@@ -1,15 +1,19 @@
 import React, { useEffect, useState, Fragment } from "react";
 import EditCard from "./EditCard";
 import { showAllCategory, showAllSkill, showAllUser } from "../Admin/apiAdmin";
-import { deleteCourse } from "./apiCourse";
+import { deleteCourse, getCourse } from "./apiCourse";
 import { isAuthenticated } from "../Components/apiCore";
-import NewVideo from "../CourseLectures/NewLecture";
 import NewSection from "../CourseLectures/NewSection";
+import SectionAccordian from "../CourseLectures/SectionAccordian";
 
-const CourseDetail = ({ courses }) => {
+const CourseDetail = ({ courseId }) => {
   const [categories, setCategories] = useState();
   const [skills, setSkills] = useState();
-  const [users, setUsers] = useState();
+  const [course, setCourse] = useState();
+  const [file, setFile] = useState({
+    video: "",
+    title: "",
+  });
 
   const showCategories = () => {
     showAllCategory().then((data) => {
@@ -31,20 +35,20 @@ const CourseDetail = ({ courses }) => {
     });
   };
 
-  const showUsers = () => {
-    showAllUser().then((data) => {
+  const getCourseById = () => {
+    getCourse(courseId).then((data) => {
       if (data.error) {
-        console.log("showUsers: ", data.error);
+        console.log("getCourseById: ", data.error);
       } else {
-        setUsers(data);
+        setCourse(data);
       }
     });
   };
 
   useEffect(() => {
+    getCourseById();
     showCategories();
     showSkills();
-    showUsers();
   }, []);
 
   const deleteHandler = (_id) => {
@@ -60,28 +64,60 @@ const CourseDetail = ({ courses }) => {
 
   const { user } = isAuthenticated();
 
+  const showVideo = (child1, child2) => {
+    setFile({ title: child1, video: child2 });
+  };
+
+  const leftComponent = () => {
+    console.log("child: ", file);
+    if (file.video) {
+      return (
+        <div
+          style={{
+            boxShadow: "1px 1px 20px 1px darkcyan",
+            padding: "0.1em",
+            marginTop: "1em",
+            border: "1px solid grey",
+          }}
+        >
+          <video
+            controls
+            style={{ outline: "none", width: "100%", height: "100%" }}
+          >
+            <source src={`/course_videos/${file.video}`} type="video/mp4" />
+          </video>
+          <h6>
+            <i className="fa fa-arrow-right text-success mr-1" />
+            {file.title}
+          </h6>
+        </div>
+      );
+    } else if (course) {
+      return (
+        <EditCard
+          categories={categories}
+          skills={skills}
+          course={course}
+          delHandler={deleteHandler}
+        />
+      );
+    }
+  };
+
   const addVideoBtn = () => {
     return (
       <Fragment>
         <center>
           <button
-            className="btn btn-primary mr-1"
+            className="btn btn-secondary"
             data-dismiss="modal"
             data-toggle="modal"
             data-target="#add-section"
           >
             Add New Section
           </button>
-
-          <button
-            className="btn btn-secondary ml-1"
-            data-dismiss="modal"
-            data-toggle="modal"
-            data-target="#add-lecture"
-          >
-            Add New Lecture
-          </button>
         </center>
+        <br />
 
         {/* ...............Course Section................ */}
         <div className="modal fade" id="add-section">
@@ -94,26 +130,8 @@ const CourseDetail = ({ courses }) => {
                 </button>
               </div>
 
-              <div className="modal-body text-body p-1">
-                <NewSection />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ...............Course Lecture................ */}
-        <div className="modal fade" id="add-lecture">
-          <div className="modal-dialog modal-md">
-            <div className="modal-content">
-              <div className="modal-header" style={{ padding: "0.5em 1em" }}>
-                <h5 className="modal-title">Upload New Lecture</h5>
-                <button type="button" className="close" data-dismiss="modal">
-                  &times;
-                </button>
-              </div>
-
-              <div className="modal-body text-body p-1">
-                <NewVideo />
+              <div className="modal-body text-body p-2">
+                {course && <NewSection course={course} />}
               </div>
             </div>
           </div>
@@ -124,62 +142,22 @@ const CourseDetail = ({ courses }) => {
 
   return (
     <div
-      className="container-fluid bootstrap snippet bg-white"
+      className="container-fluid bootstrap snippet bg-white p-2"
       style={{ boxShadow: "1px 1px 20px 1px darkcyan" }}
     >
       <center>
-        <h1>User name</h1>
+        <h4>{course && course.name}</h4>
       </center>
 
       <div className="row">
-        <div className="col-sm-4">
-          {courses &&
-            courses.map((course, i) => {
-              if (course._id === "5ec966d035eb2d29a4e83620") {
-                return (
-                  <EditCard
-                    key={i}
-                    categories={categories}
-                    skills={skills}
-                    course={course}
-                    delHandler={deleteHandler}
-                  />
-                );
-              }
-            })}
-
+        <div className="col-sm-5">
+          {leftComponent()}
           <br />
           {addVideoBtn()}
         </div>
 
-        <div className="col-sm-8">
-          <center>
-            <h4>Course Sections</h4>
-          </center>
-          {courses &&
-            courses.map((course, i) => (
-              <div
-                className="row m-1 mb-4"
-                style={{ boxShadow: "1px 1px 5px 1px darkcyan" }}
-              >
-                <div
-                  key={i}
-                  className="bg-primary m-2 col-sm-5"
-                  style={{
-                    width: "95%",
-                    height: "25vh",
-                  }}
-                ></div>
-                <div
-                  key={"a" + i}
-                  className="bg-secondary m-2 col-sm-6"
-                  style={{
-                    width: "95%",
-                    height: "25vh",
-                  }}
-                ></div>
-              </div>
-            ))}
+        <div className="col-sm-7 p-3">
+          <SectionAccordian courseId={courseId} showVideo={showVideo} />
         </div>
       </div>
     </div>

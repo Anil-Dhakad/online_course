@@ -109,29 +109,35 @@ const EditCard = (props) => {
               className="modal-footer"
               style={{ padding: "0.5rem 1rem 0.5rem" }}
             >
-              <button
-                className="btn btn-primary"
-                data-dismiss="modal"
-                onClick={() => props.clickHandler("detail-" + course._id)}
-              >
-                View Details
-              </button>
-              {/* <button
-                className="btn btn-warning"
-                data-dismiss="modal"
-                data-toggle="modal"
-                data-target={"#e" + course._id}
-              >
-                Edit Course
-              </button>
-              <button
-                className="btn btn-danger"
-                data-dismiss="modal"
-                data-toggle="modal"
-                data-target={"#del" + course._id}
-              >
-                Delete Course
-              </button> */}
+              {!props.delHandler && (
+                <button
+                  className="btn btn-primary"
+                  data-dismiss="modal"
+                  onClick={() => props.clickHandler("detail-" + course._id)}
+                >
+                  View Details
+                </button>
+              )}
+              {props.delHandler && (
+                <Fragment>
+                  <button
+                    className="btn btn-warning"
+                    data-dismiss="modal"
+                    data-toggle="modal"
+                    data-target={"#e" + course._id}
+                  >
+                    Edit Course
+                  </button>
+                  <button
+                    className="btn btn-danger"
+                    data-dismiss="modal"
+                    data-toggle="modal"
+                    data-target={"#del" + course._id}
+                  >
+                    Delete Course
+                  </button>
+                </Fragment>
+              )}
             </div>
           </div>
         </div>
