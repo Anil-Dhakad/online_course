@@ -340,7 +340,7 @@ input[type="search"] {
 .card {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3);
   transition: 0.2s;
-  width: 40%;
+  /* width: 40%; */
 }
 
 .card:hover {
@@ -350,4 +350,8 @@ input[type="search"] {
 .remove:hover {
   cursor: pointer;
   color: #565050;
+}
+
+.rotate-icon:after {
+  content: "\2212";
 }
