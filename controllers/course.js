@@ -146,8 +146,6 @@ exports.list = (req, res) => {
   Course.find()
     .populate("category")
     .populate("user")
-    .populate("Skills")
-    // .sort({ name: 1 })
     .exec((err, result) => {
       if (err) {
         return res.status(400).json({ error: errorHandler(err) });
@@ -199,7 +197,6 @@ exports.search = (req, res) => {
   Course.find(filter)
     .populate("category")
     .populate("user")
-    .populate("Skills")
     .sort([[sortBy, order]])
     .exec((err, result) => {
       // console.log("result: ", result);
@@ -237,5 +234,18 @@ exports.search = (req, res) => {
       } else {
         return res.json(result);
       }
+    });
+};
+
+exports.courseById = (req, res) => {
+  id = req.params.courseId;
+  Course.findById(id)
+    .populate("category")
+    .populate("user")
+    .exec((err, data) => {
+      if (err || !data) {
+        return res.json({ error: "Course does not exist" });
+      }
+      return res.json(data);
     });
 };
