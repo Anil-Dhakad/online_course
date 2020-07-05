@@ -3,7 +3,7 @@ const { ObjectId } = mongoose.Schema;
 
 var sectionSchema = new mongoose.Schema(
   {
-    couseId: {
+    courseId: {
       type: ObjectId,
       ref: "Course",
       required: true,
