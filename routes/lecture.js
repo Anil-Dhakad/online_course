@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-const { create } = require("../controllers/lecture");
+const { create, list } = require("../controllers/lecture");
 
 router.post("/lecture/create", create);
-// router.get("/section/:courseId", list);
+router.get("/lecture/:sectionId", list);
 // router.post("/section/edit", update);
 
 module.exports = router;
