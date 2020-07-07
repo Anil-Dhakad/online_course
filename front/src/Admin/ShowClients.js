@@ -1,13 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { deleteUser, showAllUser } from "./apiAdmin";
 
-// import "../asset/css/jquery.dataTables.css";
-// import "../asset/css/dataTable.css";
-// import "../asset/css/shCore.css";
-// import "../asset/js/jquery.dataTables";
-// import "../asset/js/shCore";
-// import "../asset/js/dataTable";
-
 const ShowClients = () => {
   const [users, setUsers] = useState();
 
