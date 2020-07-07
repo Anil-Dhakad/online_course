@@ -1,9 +1,11 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { showAllSection, editSection } from "./apiLecture";
 import NewLecture from "./NewLecture";
+import ShowLecture from "./ShowLecture";
+import { isAuthenticated } from "../Components/apiCore";
 
-const SectionAccordian = ({ courseId, showVideo }) => {
-  // console.log("courseID: ", courseId);
+const SectionAccordian = ({ course, showVideo }) => {
+  // console.log("courseID: ", course);
   const [editvalue, setEditvalue] = useState({
     _id: "",
     sectionNo: "",
@@ -17,7 +19,7 @@ const SectionAccordian = ({ courseId, showVideo }) => {
   });
 
   const getSection = () => {
-    showAllSection(courseId).then((data) => {
+    showAllSection(course._id).then((data) => {
       console.log("data-section: ", data);
       if (data.error) {
         console.log("getCourseById: ", data.error);
@@ -30,6 +32,8 @@ const SectionAccordian = ({ courseId, showVideo }) => {
   useEffect(() => {
     getSection();
   }, []);
+
+  const { user } = isAuthenticated();
 
   const changeEdit = (event) => {
     setEditvalue({ ...editvalue, [event.target.name]: event.target.value });
@@ -135,57 +139,57 @@ const SectionAccordian = ({ courseId, showVideo }) => {
       >
         {section &&
           section.map((sec, i) => (
-            <div
-              className="card"
-              style={{ overflow: "unset" }}
-              key={i}
-              onClick={() => {
-                clickToggle(i);
-              }}
-            >
+            <div className="card" style={{ overflow: "unset" }} key={i}>
               <div
                 className="card-header pl-4 pr-4 pt-2 pb-2"
                 role="tab"
                 id="headingUnfiled"
               >
-                <div className="dropdown float-left">
-                  <button
-                    className="btn btn-info btn-sm m-0 mr-3 p-1 dropdown-toggle"
-                    type="button"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    <i className="fa fa-pencil-alt"></i>
-                  </button>
-                  <div className="dropdown-menu dropdown-info animate slideIn">
-                    <a
-                      className="dropdown-item"
-                      href="#"
-                      onClick={() =>
-                        setSect({ ...sect, secId: sec._id, secOpen: true })
-                      }
-                      data-dismiss="modal"
-                      data-toggle="modal"
-                      data-target="#add-lecture"
+                {(user.role === "admin" || user._id === course.user._id) && (
+                  <div className="dropdown float-left">
+                    <button
+                      className="btn btn-info btn-sm m-0 mr-3 p-1 dropdown-toggle"
+                      type="button"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
                     >
-                      Add New Lecture
-                    </a>
-                    <a
-                      className="dropdown-item"
-                      href="#"
-                      onClick={() =>
-                        showClick(i, sec._id, sec.sectionNo, sec.name)
-                      }
-                    >
-                      Rename Section
-                    </a>
-                    <a className="dropdown-item" href="#">
-                      Delete Section
-                    </a>
+                      <i className="fa fa-pencil-alt"></i>
+                    </button>
+                    <div className="dropdown-menu dropdown-info animate slideIn">
+                      <a
+                        className="dropdown-item"
+                        href="#"
+                        onClick={() =>
+                          setSect({ ...sect, secId: sec._id, secOpen: true })
+                        }
+                        data-dismiss="modal"
+                        data-toggle="modal"
+                        data-target="#add-lecture"
+                      >
+                        Add New Lecture
+                      </a>
+                      <a
+                        className="dropdown-item"
+                        href="#"
+                        onClick={() =>
+                          showClick(i, sec._id, sec.sectionNo, sec.name)
+                        }
+                      >
+                        Rename Section
+                      </a>
+                      <a className="dropdown-item" href="#">
+                        Delete Section
+                      </a>
+                    </div>
                   </div>
-                </div>
-                <div>
+                )}
+
+                <div
+                  onClick={() => {
+                    clickToggle(i);
+                  }}
+                >
                   <a
                     data-toggle="collapse"
                     data-parent="#accordionEx78"
@@ -258,14 +262,8 @@ const SectionAccordian = ({ courseId, showVideo }) => {
                 aria-labelledby="headingUnfiled"
                 data-parent="#accordionEx78"
               >
-                <div className="card-body p-1 pl-4">
-                  <h3
-                    onClick={() =>
-                      showVideo(sec.name, "52a0bf208cdf9807d2ddeb9bca7788fc")
-                    }
-                  >
-                    hello
-                  </h3>
+                <div className="card-body p-1" style={{ color: "#5d5656" }}>
+                  <ShowLecture sectionId={sec._id} showVideo={showVideo} />
                 </div>
               </div>
             </div>

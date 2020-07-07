@@ -57,3 +57,14 @@ export const createLecture = (formData) => {
     })
     .catch((err) => console.log(err));
 };
+
+export const showAllLecture = (id) => {
+  console.log("id-lecture: ", id);
+  return fetch(`${API}/lecture/${id}`, {
+    method: "GET",
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => console.log(err));
+};

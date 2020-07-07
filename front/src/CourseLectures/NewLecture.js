@@ -32,7 +32,7 @@ const NewLecture = ({ sectionId, sections }) => {
         </div>
       );
     } else {
-      setError("");
+      // setError("");
 
       // function progressHandler(event) {
       //   var percent = (event.loaded / event.total) * 100;
@@ -47,53 +47,54 @@ const NewLecture = ({ sectionId, sections }) => {
       formData.append("video", video);
 
       createLecture(formData).then((data) => {
-        data = data.data;
+        console.log("NewLecture-data: ", data);
+        // data = data.data;
         // function completeHandler(event) {
         //   _("status").innerHTML = event.target.responseText;
         //   _("progressBar").value = 0; //wil clear progress bar after successful upload
         // }
-        if (data.error === "all fields") {
-          setError(
-            <div className="alert alert-danger p-1">
-              <strong style={{ color: "red" }}>
-                <i className="fa fa-info-circle" />
-                &nbsp; All fields are required...
-              </strong>
-            </div>
-          );
-        } else if (data.msg === "not") {
-          //       setError(
-          //         <div className="alert alert-warning p-2">
-          //           <strong>
-          //             <i className="fa fa-info-circle" />
-          //             &nbsp; Course <b style={{ color: "#30bd30" }}>{name}</b> is
-          //             already available...
-          //           </strong>
-          //         </div>
-          //       );
-          //     } else if (data.msg === "created") {
-          //       setError(
-          //         <div className="alert alert-success p-2">
-          //           <strong>
-          //             Course <b style={{ color: "#30bd30" }}>{name}</b> is
-          //             successfully created...
-          //           </strong>
-          //         </div>
-          //       );
-          //       window.location.reload();
-          //     } else if (data.error) {
-          //       setError(
-          //         <div className="alert alert-danger p-2">
-          //           <strong>{data.error}</strong>
-          //         </div>
-          //       );
-          //     } else {
-          //       setError(
-          //         <div className="alert alert-danger p-2">
-          //           <strong>Something went wrong...</strong>
-          //         </div>
-          //       );
-        }
+        // if (data.error === "all fields") {
+        //   setError(
+        //     <div className="alert alert-danger p-1">
+        //       <strong style={{ color: "red" }}>
+        //         <i className="fa fa-info-circle" />
+        //         &nbsp; All fields are required...
+        //       </strong>
+        //     </div>
+        //   );
+        // } else if (data.msg === "not") {
+        //       setError(
+        //         <div className="alert alert-warning p-2">
+        //           <strong>
+        //             <i className="fa fa-info-circle" />
+        //             &nbsp; Course <b style={{ color: "#30bd30" }}>{name}</b> is
+        //             already available...
+        //           </strong>
+        //         </div>
+        //       );
+        //     } else if (data.msg === "created") {
+        //       setError(
+        //         <div className="alert alert-success p-2">
+        //           <strong>
+        //             Course <b style={{ color: "#30bd30" }}>{name}</b> is
+        //             successfully created...
+        //           </strong>
+        //         </div>
+        //       );
+        //       window.location.reload();
+        //     } else if (data.error) {
+        //       setError(
+        //         <div className="alert alert-danger p-2">
+        //           <strong>{data.error}</strong>
+        //         </div>
+        //       );
+        //     } else {
+        //       setError(
+        //         <div className="alert alert-danger p-2">
+        //           <strong>Something went wrong...</strong>
+        //         </div>
+        //       );
+        // }
       });
     }
   };

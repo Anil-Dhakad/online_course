@@ -14,7 +14,7 @@ const NewSection = ({ course }) => {
     showAllSection(course._id).then((data) => {
       // console.log("data-section: ", data);
       if (data.error) {
-        console.log("getCourseById: ", data.error);
+        console.log("showAllSection: ", data.error);
       } else if (data.length !== 0) {
         setValues({
           ...values,
