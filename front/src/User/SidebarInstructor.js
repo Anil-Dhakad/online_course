@@ -23,13 +23,13 @@ const SidebarInstructor = (props) => {
           <h3>{user.name}</h3>
         </div>
       </div>
-      <ul className="list-unstyled components mb-5">
-        <li className="active">
+      <ul id="myUL" className="list-unstyled components mb-5">
+        <li className="li active">
           <a onClick={() => props.clickHandler("home")}>
             <span className="fa fa-home mr-3"></span> Home
           </a>
         </li>
-        <li>
+        <li className="li">
           <a onClick={() => props.clickHandler("course")}>
             <span className="fa fa-list mr-3 notif"></span>
             Your Courses
@@ -45,8 +45,14 @@ const SidebarInstructor = (props) => {
             Your Cart
           </a>
         </li>
+        <li className="li">
+          <a onClick={() => props.clickHandler("order")}>
+            <span className="fa fa-list mr-3 notif"></span>
+            Your Orders
+          </a>
+        </li>
 
-        <li>
+        <li className="li">
           <a data-toggle="collapse" href="#collapse1" onClick={classToggle}>
             <span className="fa fa-cog mr-3"></span> Settings
             <span

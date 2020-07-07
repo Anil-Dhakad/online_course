@@ -24,6 +24,7 @@ import "../asset/css/style.css";
 import "../asset/css/sidebar.css";
 import "../asset/js/javascript";
 import CourseDetail from "../Course/CourseDetail";
+import OrderList from "../Order/OrderList";
 
 const UserHome = () => {
   console.log("USERHOME");
@@ -119,7 +120,9 @@ const UserHome = () => {
     } else if (values === "all_instructor") {
       return <ShowInstructors courses={courses} />;
     } else if (values === "cart") {
-      return <Cart cart={cart} />;
+      return <Cart cart={cart} clickHandler={clickSidebar} />;
+    } else if (values === "order") {
+      return <OrderList clickHandler={clickSidebar} />;
     } else if (values === "profile") {
       return <Profile />;
     } else if (values === "changePwd") {
