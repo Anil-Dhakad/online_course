@@ -1,15 +1,15 @@
-const Cart = require("../models/cart");
+const Order = require("../models/order");
 const { errorHandler } = require("../helphers/dbErrorHandler");
 
 exports.create = (req, res) => {
-  const cart = new Cart(req.body);
-  console.log("cart: ", cart);
+  const order = new Order(req.body);
+  console.log("order: ", order);
 
-  Cart.find({ user: cart.user, course: cart.course })
+  Order.find({ user: order.user, course: order.course })
     .collation({ locale: "en", strength: 2 })
     .exec((err, data) => {
       if (data.length === 0) {
-        cart.save((err, result) => {
+        order.save((err, result) => {
           if (err) {
             return res.status(400).json({ error: errorHandler(err) });
           }
@@ -23,9 +23,8 @@ exports.create = (req, res) => {
 
 exports.list = (req, res) => {
   const user = req.body.id;
-  Cart.find({ user: user })
+  Order.find({ user: user })
     .populate("course")
-    .populate("user", "_id name")
     .sort({ timestamps: 1 })
     .exec((err, result) => {
       if (err) {
@@ -33,14 +32,4 @@ exports.list = (req, res) => {
       }
       return res.json(result);
     });
-};
-
-exports.remove = (req, res) => {
-  const id = req.body;
-  Cart.deleteOne({ _id: id }, (err, result) => {
-    if (err) {
-      return res.status(400).json({ error: errorHandler(err) });
-    }
-    return res.json("yes");
-  });
 };

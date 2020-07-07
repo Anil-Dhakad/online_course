@@ -241,7 +241,7 @@ exports.courseById = (req, res) => {
   id = req.params.courseId;
   Course.findById(id)
     .populate("category")
-    .populate("user")
+    .populate("user", "_id name")
     .exec((err, data) => {
       if (err || !data) {
         return res.json({ error: "Course does not exist" });

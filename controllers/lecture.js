@@ -27,13 +27,17 @@ exports.create = (req, res) => {
     lecture._id = req.body._id;
     lecture.sectionId = req.body.sectionId;
     lecture.title = req.body.title;
-    lecture.video = req.body.video;
+    lecture.video = req.file.filename;
+
+    console.log("lecture: ", lecture);
 
     Lecture.find({ sectionId: sectionId, title: title })
       .collation({ locale: "en", strength: 2 })
       .exec((err, data) => {
+        console.log("lecture-data: ", data);
         if (data.length === 0) {
           lecture.save((err, result) => {
+            console.log("lecture-result: ", result);
             if (err) {
               return res.json({ error: errorHandler(err) });
             }
@@ -44,4 +48,16 @@ exports.create = (req, res) => {
         }
       });
   });
+};
+
+exports.list = (req, res) => {
+  id = req.params.sectionId;
+  Lecture.find({ sectionId: id })
+    .sort({ updatedAt: 1 })
+    .exec((err, result) => {
+      if (err) {
+        return res.status(400).json({ error: errorHandler(err) });
+      }
+      return res.json(result);
+    });
 };

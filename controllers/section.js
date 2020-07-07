@@ -27,7 +27,7 @@ exports.list = (req, res) => {
   id = req.params.courseId;
   Section.find({ courseId: id })
     .populate("courseId", "_id name")
-    .sort({ _id: 1 })
+    .sort({ sectionNo: 1 })
     .exec((err, result) => {
       if (err) {
         return res.status(400).json({ error: errorHandler(err) });
