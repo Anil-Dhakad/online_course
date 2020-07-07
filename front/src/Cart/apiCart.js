@@ -36,24 +36,6 @@ export const showCartItem = (user) => {
     });
 };
 
-// export const editCategory = (edit_Id) => {
-//   // console.log("edit_id: ", edit_Id);
-//   return fetch(`${API}/category/edit`, {
-//     method: "POST",
-//     headers: {
-//       Accept: "application/json",
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(edit_Id),
-//   })
-//     .then((response) => {
-//       return response.json();
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// };
-
 export const removeCourse = (delete_Id) => {
   console.log("delete_id: ", delete_Id);
   return fetch(`${API}/cart/remove`, {

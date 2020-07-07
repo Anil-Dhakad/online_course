@@ -4,10 +4,32 @@ import { isAuthenticated } from "../Components/apiCore";
 
 const Card = (props) => {
   const cart = props.cart;
+  const showWish = props.showWish;
 
   // console.log("items: ", cart);
 
   const { user } = isAuthenticated();
+
+  const showViewButton = () => {
+    if (props.showViewBtn) {
+      return (
+        <button
+          className="btn btn-primary"
+          data-dismiss="modal"
+          onClick={() => props.clickHandler("detail-" + cart.course._id)}
+        >
+          View Details
+        </button>
+      );
+    } else {
+      return (
+        <strong className="remove" onClick={() => props.clickHandler(cart._id)}>
+          <i className="fa fa-trash-alt" />
+          &nbsp; Remove
+        </strong>
+      );
+    }
+  };
 
   return (
     <Fragment>
@@ -41,13 +63,7 @@ const Card = (props) => {
             ₹{cart.course.price}
           </h6>
           <br />
-          <strong
-            className="remove"
-            onClick={() => props.clickHandler(cart._id)}
-          >
-            <i className="fa fa-trash-alt" />
-            &nbsp; Remove
-          </strong>
+          {showViewButton()}
         </div>
       </div>
     </Fragment>
