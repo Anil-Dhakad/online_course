@@ -355,3 +355,37 @@ input[type="search"] {
 .rotate-icon:after {
   content: "\2212";
 }
+
+/* ////////////////////////  Lecture  /////////////////////// */
+
+.lecture-title:hover {
+  color: #07078a;
+}
+.video-box {
+  box-shadow: 1px 1px 20px 1px darkcyan;
+  padding: 0.1em;
+  margin-top: 1em;
+  border: 1px solid grey;
+}
+.video-box:hover .top-right {
+  background-color: white;
+  border: 1px solid;
+  z-index: 10;
+  cursor: pointer;
+}
+.top-right {
+  position: absolute;
+  padding: 0px 7px 0px;
+  margin: 0.2em;
+  right: 16px;
+  color: black;
+  border-radius: 50%;
+}
+
+/* ////////////////////////  Checkout  /////////////////////// */
+.check0 {
+  background-color: #fbf9f9;
+}
+.check1 {
+  background-color: #ffffff;
+}
