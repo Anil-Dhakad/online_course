@@ -34,7 +34,7 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-// virtual field
+// Virtual Field
 userSchema
   .virtual("password")
   .set(function (password) {
