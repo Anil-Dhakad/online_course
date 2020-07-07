@@ -2,11 +2,14 @@ import React, { Fragment } from "react";
 import moment from "moment";
 import EditCourse from "../Course/EditCourse";
 import EditCoursePhoto from "./EditCoursePhoto";
+import { isAuthenticated } from "../Components/apiCore";
 
 const EditCard = (props) => {
   const course = props.course;
   const categories = props.categories;
   const skills = props.skills;
+
+  const { user } = isAuthenticated();
 
   const formatDate = (dateString) => {
     const options = { day: "numeric", month: "numeric", year: "numeric" };
@@ -118,26 +121,27 @@ const EditCard = (props) => {
                   View Details
                 </button>
               )}
-              {props.delHandler && (
-                <Fragment>
-                  <button
-                    className="btn btn-warning"
-                    data-dismiss="modal"
-                    data-toggle="modal"
-                    data-target={"#e" + course._id}
-                  >
-                    Edit Course
-                  </button>
-                  <button
-                    className="btn btn-danger"
-                    data-dismiss="modal"
-                    data-toggle="modal"
-                    data-target={"#del" + course._id}
-                  >
-                    Delete Course
-                  </button>
-                </Fragment>
-              )}
+              {(user.role === "admin" || user._id === course.user._id) &&
+                props.delHandler && (
+                  <Fragment>
+                    <button
+                      className="btn btn-warning"
+                      data-dismiss="modal"
+                      data-toggle="modal"
+                      data-target={"#e" + course._id}
+                    >
+                      Edit Course
+                    </button>
+                    <button
+                      className="btn btn-danger"
+                      data-dismiss="modal"
+                      data-toggle="modal"
+                      data-target={"#del" + course._id}
+                    >
+                      Delete Course
+                    </button>
+                  </Fragment>
+                )}
             </div>
           </div>
         </div>

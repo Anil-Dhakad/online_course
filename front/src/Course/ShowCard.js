@@ -7,23 +7,22 @@ const ShowCard = (props) => {
   const course = props.course;
   const carts = props.cart;
 
-  const [title, setTitle] = useState();
+  const [title, setCartTitle] = useState();
 
   const { user } = isAuthenticated();
 
-  // console.log("Show-Card: ", props.cart);
-
-  let d = 0;
+  let c = 0;
 
   if (user) {
-    carts.forEach((element) => {
-      if (element.course._id === course._id) {
-        d = 1;
-      }
-    });
+    carts &&
+      carts.forEach((element) => {
+        if (element.course._id === course._id) {
+          c = 1;
+        }
+      });
   }
 
-  const itemSubmit = (id) => {
+  const itemSubmitToCart = (id) => {
     const item = {
       user: user._id,
       course: id,
@@ -32,13 +31,13 @@ const ShowCard = (props) => {
       if (data.error) {
         console.log("Add To Cart: ", data.error);
       } else {
-        setTitle("gotocart");
+        setCartTitle("gotocart");
       }
     });
   };
 
   const ShowAddToCartButton = () => {
-    if (user && d === 1) {
+    if (user && c === 1) {
       return (
         <Fragment>
           <strong
@@ -84,7 +83,7 @@ const ShowCard = (props) => {
       return (
         <button
           className="btn btn-secondary"
-          onClick={() => itemSubmit(course._id)}
+          onClick={() => itemSubmitToCart(course._id)}
         >
           Add to cart
         </button>

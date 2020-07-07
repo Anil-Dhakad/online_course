@@ -57,7 +57,7 @@ const CourseDetail = ({ courseId }) => {
       if (data.error) {
         setError(data.error);
       } else {
-        window.location.reload();
+        // window.location.reload();
       }
     });
   };
@@ -65,6 +65,7 @@ const CourseDetail = ({ courseId }) => {
   const { user } = isAuthenticated();
 
   const showVideo = (child1, child2) => {
+    console.log(child1, " :-------: ", child2);
     setFile({ title: child1, video: child2 });
   };
 
@@ -72,16 +73,17 @@ const CourseDetail = ({ courseId }) => {
     console.log("child: ", file);
     if (file.video) {
       return (
-        <div
-          style={{
-            boxShadow: "1px 1px 20px 1px darkcyan",
-            padding: "0.1em",
-            marginTop: "1em",
-            border: "1px solid grey",
-          }}
-        >
+        <div className="video-box mt-4">
+          <div
+            className="top-right"
+            onClick={() => showVideo(file.title, "")}
+            title="close"
+          >
+            &#10006;
+          </div>
           <video
             controls
+            autoPlay
             style={{ outline: "none", width: "100%", height: "100%" }}
           >
             <source src={`/course_videos/${file.video}`} type="video/mp4" />
@@ -105,39 +107,41 @@ const CourseDetail = ({ courseId }) => {
   };
 
   const addVideoBtn = () => {
-    return (
-      <Fragment>
-        <center>
-          <button
-            className="btn btn-secondary"
-            data-dismiss="modal"
-            data-toggle="modal"
-            data-target="#add-section"
-          >
-            Add New Section
-          </button>
-        </center>
-        <br />
+    if (user.role === "admin" || (course && user._id === course.user._id)) {
+      return (
+        <Fragment>
+          <center>
+            <button
+              className="btn btn-secondary"
+              data-dismiss="modal"
+              data-toggle="modal"
+              data-target="#add-section"
+            >
+              Add New Section
+            </button>
+          </center>
+          <br />
 
-        {/* ...............Course Section................ */}
-        <div className="modal fade" id="add-section">
-          <div className="modal-dialog modal-md">
-            <div className="modal-content">
-              <div className="modal-header" style={{ padding: "0.5em 1em" }}>
-                <h5 className="modal-title">Add New Section</h5>
-                <button type="button" className="close" data-dismiss="modal">
-                  &times;
-                </button>
-              </div>
+          {/* ...............Course Section................ */}
+          <div className="modal fade" id="add-section">
+            <div className="modal-dialog modal-md">
+              <div className="modal-content">
+                <div className="modal-header" style={{ padding: "0.5em 1em" }}>
+                  <h5 className="modal-title">Add New Section</h5>
+                  <button type="button" className="close" data-dismiss="modal">
+                    &times;
+                  </button>
+                </div>
 
-              <div className="modal-body text-body p-2">
-                {course && <NewSection course={course} />}
+                <div className="modal-body text-body p-2">
+                  {course && <NewSection course={course} />}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </Fragment>
-    );
+        </Fragment>
+      );
+    }
   };
 
   return (
@@ -157,7 +161,7 @@ const CourseDetail = ({ courseId }) => {
         </div>
 
         <div className="col-sm-7 p-3">
-          <SectionAccordian courseId={courseId} showVideo={showVideo} />
+          {course && <SectionAccordian course={course} showVideo={showVideo} />}
         </div>
       </div>
     </div>

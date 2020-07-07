@@ -51,7 +51,7 @@ const YourCourse = ({ courses, clickHandler }) => {
   return (
     <Fragment>
       <center>
-        <h2>Courses</h2>
+        <h3 style={{ textDecoration: "underline" }}>Courses</h3>
       </center>
       <SearchBar users={users} />
       <NewCourse categories={categories} skills={skills} />
