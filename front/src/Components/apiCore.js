@@ -84,9 +84,14 @@ export const updateAuthenticate = (data, next) => {
 
       if (data.image !== undefined) {
         jwt.user["photo"] = data.image;
-      } else if (data.name !== "" || data.email !== "") {
+      } else if (
+        (data.name !== undefined || data.email !== undefined) &&
+        (data.name !== "" || data.email !== "")
+      ) {
         jwt.user["name"] = data.name;
         jwt.user["email"] = data.email;
+      } else if (data.role !== undefined && data.role !== "") {
+        jwt.user["role"] = data.role;
       }
 
       localStorage.setItem("jwt", JSON.stringify(jwt));
