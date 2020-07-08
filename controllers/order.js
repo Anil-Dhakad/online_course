@@ -21,9 +21,21 @@ exports.create = (req, res) => {
     });
 };
 
-exports.list = (req, res) => {
+exports.listByUser = (req, res) => {
   const user = req.body.id;
   Order.find({ user: user })
+    .populate("course")
+    .sort({ timestamps: 1 })
+    .exec((err, result) => {
+      if (err) {
+        return res.status(400).json({ error: "No course found" });
+      }
+      return res.json(result);
+    });
+};
+
+exports.listAll = (req, res) => {
+  Order.find()
     .populate("course")
     .sort({ timestamps: 1 })
     .exec((err, result) => {

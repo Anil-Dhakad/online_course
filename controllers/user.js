@@ -71,6 +71,8 @@ exports.profile = (req, res) => {
       if (err) {
         return res.status(400).json({ error: errorHandler(err) });
       }
+      result.salt = undefined;
+      result.hashed_password = undefined;
       return res.json(result);
     }
   );
@@ -188,4 +190,28 @@ exports.updatePhoto = (req, res) => {
       }
     );
   });
+};
+
+exports.becomeInstructor = (req, res) => {
+  const user = req.body;
+  console.log("user: ", user);
+
+  User.findOneAndUpdate(
+    { _id: user._id },
+    { role: user.role },
+    { new: true, useFindAndModify: false },
+    (err, result) => {
+      if (err) {
+        return res.status(400).json({ error: errorHandler(err) });
+      }
+      result.name = undefined;
+      result.email = undefined;
+      result.photo = undefined;
+      result.salt = undefined;
+      result.hashed_password = undefined;
+      result.createdAt = undefined;
+      result.updatedAt = undefined;
+      return res.json(result);
+    }
+  );
 };
