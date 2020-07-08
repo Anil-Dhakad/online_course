@@ -8,6 +8,7 @@ const {
   forgotpwd,
   profile,
   changePwd,
+  becomeInstructor,
   list,
   updatePhoto,
 } = require("../controllers/user");
@@ -18,6 +19,7 @@ router.post("/signout", signout);
 router.post("/forgotpwd", forgotpwd);
 router.post("/profile", profile);
 router.post("/changepwd", changePwd);
+router.post("/become", becomeInstructor);
 router.post("/user/users", list);
 router.post("/user/photo", updatePhoto);
 
