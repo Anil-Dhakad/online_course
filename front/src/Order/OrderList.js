@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { isAuthenticated } from "../Components/apiCore";
-import { showAllOrder } from "../Order/apiOrder";
+import { ordersByUserId } from "../Order/apiOrder";
 import Card from "../Cart/Card";
 
 const OrderList = (props) => {
@@ -10,7 +10,7 @@ const OrderList = (props) => {
 
   const orderlist = () => {
     const id = user._id;
-    showAllOrder({ id }).then((data) => {
+    ordersByUserId({ id }).then((data) => {
       console.log("order: ", data);
       if (data.error) {
         console.log("Order Item: ", data.error);
