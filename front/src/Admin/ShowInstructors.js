@@ -1,9 +1,11 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { deleteUser, showAllUser } from "./apiAdmin";
+import { showAllOrder } from "../Order/apiOrder";
 
-const ShowInstructors = ({ courses }) => {
+const ShowInstructors = (props) => {
+  const courses = props.courses;
   const [users, setUsers] = useState();
-
+  const [orders, setOrders] = useState();
   const [error, setError] = useState();
 
   const showUsers = () => {
@@ -16,8 +18,20 @@ const ShowInstructors = ({ courses }) => {
     });
   };
 
+  const orderlist = () => {
+    showAllOrder().then((data) => {
+      console.log("order: ", data);
+      if (data.error) {
+        console.log("Order Item: ", data.error);
+      } else {
+        setOrders(data);
+      }
+    });
+  };
+
   useEffect(() => {
     showUsers();
+    orderlist();
   }, []);
 
   const deleteHandler = (_id) => {
@@ -48,8 +62,9 @@ const ShowInstructors = ({ courses }) => {
             <tr className="row table-head">
               <th className="col">SNo.</th>
               <th className="col">Profile</th>
-              <th className="col">Details</th>
-              <th className="col">DELETE</th>
+              <th className="col">Uploaded Courses</th>
+              <th className="col">Bought Courses</th>
+              <th className="col">Delete</th>
             </tr>
           </thead>
           <tbody>
@@ -58,7 +73,7 @@ const ShowInstructors = ({ courses }) => {
                 let j = 1;
                 if (user.role === "instructor") {
                   return (
-                    <tr key={i} className="row">
+                    <tr key={i} className={"row check" + (j % 2)}>
                       <td className="col">
                         <b>{j}</b>
                       </td>
@@ -72,15 +87,49 @@ const ShowInstructors = ({ courses }) => {
                         {user.email}
                       </td>
 
-                      <td
-                        className="col"
-                        id={`del1_${i}`}
-                        style={{ display: "block" }}
-                      >
+                      <td className="col" id={`del1_${i}`}>
                         {courses &&
                           courses.map((course, k) => {
                             if (course.user._id === user._id) {
-                              return <h6 key={k}>{course.name}</h6>;
+                              return (
+                                <a
+                                  key={k}
+                                  className="course-a"
+                                  style={{
+                                    display: "block",
+                                    fontSize: "0.9em",
+                                  }}
+                                  onClick={() =>
+                                    props.clickHandler("detail-" + course._id)
+                                  }
+                                >
+                                  {course.name}
+                                </a>
+                              );
+                            }
+                          })}
+                      </td>
+                      <td className="col" id={`del1_${i}`}>
+                        {orders &&
+                          orders.map((order, k) => {
+                            if (order.user === user._id) {
+                              return (
+                                <a
+                                  key={k}
+                                  className="course-a"
+                                  style={{
+                                    display: "block",
+                                    fontSize: "0.9em",
+                                  }}
+                                  onClick={() =>
+                                    props.clickHandler(
+                                      "detail-" + order.course._id
+                                    )
+                                  }
+                                >
+                                  {order.course.name}
+                                </a>
+                              );
                             }
                           })}
                       </td>

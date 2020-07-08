@@ -1,9 +1,10 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { deleteUser, showAllUser } from "./apiAdmin";
+import { showAllOrder } from "../Order/apiOrder";
 
-const ShowClients = () => {
+const ShowClients = (props) => {
   const [users, setUsers] = useState();
-
+  const [orders, setOrders] = useState();
   const [error, setError] = useState();
 
   const showUsers = () => {
@@ -16,8 +17,20 @@ const ShowClients = () => {
     });
   };
 
+  const orderlist = () => {
+    showAllOrder().then((data) => {
+      console.log("order: ", data);
+      if (data.error) {
+        console.log("Order Item: ", data.error);
+      } else {
+        setOrders(data);
+      }
+    });
+  };
+
   useEffect(() => {
     showUsers();
+    orderlist();
   }, []);
 
   const deleteHandler = (_id) => {
@@ -47,9 +60,9 @@ const ShowClients = () => {
           <thead>
             <tr className="row table-head">
               <th className="col">SNo.</th>
-              <th className="col">NAME</th>
-              <th className="col">EMAIL-ID</th>
-              <th className="col">DELETE</th>
+              <th className="col">Profile</th>
+              <th className="col">Bought Courses</th>
+              <th className="col">Delete</th>
             </tr>
           </thead>
           <tbody>
@@ -58,7 +71,7 @@ const ShowClients = () => {
                 let j = 1;
                 if (user.role === "client") {
                   return (
-                    <tr key={i} className="row">
+                    <tr key={i} className={"row check" + (j % 2)}>
                       <td className="col">
                         <b>{j}</b>
                       </td>
@@ -68,14 +81,33 @@ const ShowClients = () => {
                         style={{ display: "block" }}
                       >
                         {user.name}
+                        <br />
+                        {user.email}
                       </td>
 
-                      <td
-                        className="col"
-                        id={`del1_${i}`}
-                        style={{ display: "block" }}
-                      >
-                        {user.email}
+                      <td className="col" id={`del1_${i}`}>
+                        {orders &&
+                          orders.map((order, k) => {
+                            if (order.user === user._id) {
+                              return (
+                                <a
+                                  key={k}
+                                  className="course-a"
+                                  style={{
+                                    display: "block",
+                                    fontSize: "0.9em",
+                                  }}
+                                  onClick={() =>
+                                    props.clickHandler(
+                                      "detail-" + order.course._id
+                                    )
+                                  }
+                                >
+                                  {order.course.name}
+                                </a>
+                              );
+                            }
+                          })}
                       </td>
 
                       <td className="col">
