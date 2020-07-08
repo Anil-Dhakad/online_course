@@ -389,3 +389,14 @@ input[type="search"] {
 .check1 {
   background-color: #ffffff;
 }
+
+/* ////////////////////////  Show Instructor  /////////////////////// */
+.course-a {
+  text-decoration: underline !important;
+  font-weight: 600;
+}
+.course-a:hover {
+  color: #6746a9 !important;
+  cursor: pointer;
+  text-decoration: underline !important;
+}
