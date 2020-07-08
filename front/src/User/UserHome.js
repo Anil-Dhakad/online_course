@@ -25,6 +25,7 @@ import "../asset/css/sidebar.css";
 import "../asset/js/javascript";
 import CourseDetail from "../Course/CourseDetail";
 import OrderList from "../Order/OrderList";
+import BecomeAnInstructor from "./BecomeAnInstructor";
 
 const UserHome = () => {
   console.log("USERHOME");
@@ -116,9 +117,9 @@ const UserHome = () => {
     } else if (values === "add_skill") {
       return <AddSkill />;
     } else if (values === "all_client") {
-      return <ShowClients />;
+      return <ShowClients clickHandler={clickSidebar} />;
     } else if (values === "all_instructor") {
-      return <ShowInstructors courses={courses} />;
+      return <ShowInstructors courses={courses} clickHandler={clickSidebar} />;
     } else if (values === "cart") {
       return <Cart cart={cart} clickHandler={clickSidebar} />;
     } else if (values === "order") {
@@ -127,6 +128,8 @@ const UserHome = () => {
       return <Profile />;
     } else if (values === "changePwd") {
       return <ChangePassword />;
+    } else if (values === "changeRole") {
+      return <BecomeAnInstructor />;
     } else {
       if (user && user.role === "admin") {
         return <YourCourse courses={courses} clickHandler={clickSidebar} />;

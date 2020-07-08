@@ -3,7 +3,7 @@ import $ from "jquery";
 import { isAuthenticated } from "../Components/apiCore";
 import { changePwd } from "./apiUser";
 
-const ChangePassword = (props) => {
+const ChangePassword = () => {
   const { user } = isAuthenticated();
 
   const [values, setValues] = useState({

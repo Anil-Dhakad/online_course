@@ -3,7 +3,7 @@ import $ from "jquery";
 import { profile } from "./apiUser";
 import { isAuthenticated, updateAuthenticate } from "../Components/apiCore";
 
-const Profile = (props) => {
+const Profile = () => {
   const { user } = isAuthenticated();
 
   const [values, setValues] = useState({

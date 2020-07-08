@@ -71,7 +71,7 @@ const SidebarClient = (props) => {
               </a>
               <a
                 style={{ padding: "0.3em 2em 0.3em 3.5em" }}
-                // onClick={() => props.clickHandler("changePwd")}
+                onClick={() => props.clickHandler("changeRole")}
               >
                 <span className="fa fa-edit mr-3"></span> Become an Instructor
               </a>
